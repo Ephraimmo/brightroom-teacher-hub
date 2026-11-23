@@ -28,3 +28,6 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Application architecture
+- Keep learner and subscription eligibility rules as pure functions under `src/domain`, so account access semantics can be tested independently of UI and service integrations.
