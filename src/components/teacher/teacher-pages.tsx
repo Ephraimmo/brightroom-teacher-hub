@@ -250,7 +250,7 @@ export function TeacherTimetablePage() {
             {weekdays.map((day) => <Button key={day} variant={selectedDay === day ? "default" : "outline"} size="sm" type="button" aria-pressed={selectedDay === day} onClick={() => setSelectedDay(day)}>{day}</Button>)}
           </div>
         ) : null}
-        <LessonRows day={view === "day" ? selectedDay : undefined} />
+        <LessonRows {...(view === "day" ? { day: selectedDay } : {})} />
       </section>
     </TeacherWorkspace>
   );
