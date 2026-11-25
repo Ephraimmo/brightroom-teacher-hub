@@ -31,3 +31,5 @@ use the editor.
 
 ## Application architecture
 - Keep learner and subscription eligibility rules as pure functions under `src/domain`, so account access semantics can be tested independently of UI and service integrations.
+- Keep the root auth-state listener in a shared provider and enforce private profile access with database row policies, so user-specific reads stay synchronized and owner-scoped.
+- Keep role-focused screens as file-based routes with shared workspace chrome and replaceable sample data, so each view is addressable without coupling it to the current sample records.
