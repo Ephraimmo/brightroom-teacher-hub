@@ -31,13 +31,16 @@ function ResetPasswordPage() {
 
   useEffect(() => {
     let mounted = true;
-    const recoveryType = new URLSearchParams(window.location.hash.replace(/^#/, "")).get("type") === "recovery";
+    const recoveryType =
+      new URLSearchParams(window.location.hash.replace(/^#/, "")).get("type") === "recovery";
     void supabase.auth.getUser().then(({ data, error: authError }) => {
       if (!mounted) return;
       setRecoveryValid(recoveryType && !authError && Boolean(data.user));
       setChecking(false);
     });
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -57,27 +60,67 @@ function ResetPasswordPage() {
   return (
     <main className="auth-page auth-page--compact">
       <div className="auth-topline">
-        <Link to="/" className="auth-brand"><span className="workspace-brand-mark"><GraduationCap aria-hidden="true" /></span><strong>LearnBridge</strong></Link>
-        <Button variant="ghost" size="sm" asChild><Link to="/auth"><ArrowLeft aria-hidden="true" /> Sign in</Link></Button>
+        <Link to="/" className="auth-brand">
+          <span className="workspace-brand-mark">
+            <GraduationCap aria-hidden="true" />
+          </span>
+          <strong>LearnBridge</strong>
+        </Link>
+        <Button variant="ghost" size="sm" asChild>
+          <Link to="/auth">
+            <ArrowLeft aria-hidden="true" /> Sign in
+          </Link>
+        </Button>
       </div>
       <section className="reset-panel">
         <p className="page-eyebrow">ACCOUNT SECURITY</p>
         <h1>Choose a new password</h1>
-        {checking ? <p className="form-message" role="status">Checking your reset link…</p> : null}
-        {!checking && !recoveryValid ? <p className="form-message form-message--error" role="alert">This reset link is missing, expired, or already used. Request a new one to continue.</p> : null}
+        {checking ? (
+          <p className="form-message" role="status">
+            Checking your reset link…
+          </p>
+        ) : null}
+        {!checking && !recoveryValid ? (
+          <p className="form-message form-message--error" role="alert">
+            This reset link is missing, expired, or already used. Request a new one to continue.
+          </p>
+        ) : null}
         {!checking && recoveryValid && !message ? (
           <form className="auth-form" onSubmit={handleSubmit}>
             <div className="form-field">
               <Label htmlFor="new-password">New password</Label>
-              <Input id="new-password" type="password" autoComplete="new-password" minLength={8} value={password} onChange={(event) => setPassword(event.currentTarget.value)} required />
+              <Input
+                id="new-password"
+                type="password"
+                autoComplete="new-password"
+                minLength={8}
+                value={password}
+                onChange={(event) => setPassword(event.currentTarget.value)}
+                required
+              />
               <span className="field-hint">Use at least 8 characters.</span>
             </div>
-            {error ? <p className="form-message form-message--error" role="alert">{error}</p> : null}
-            <Button className="auth-submit" type="submit" disabled={busy}>{busy ? <LoaderCircle className="animate-spin" aria-hidden="true" /> : null}{busy ? "Saving…" : "Save new password"}</Button>
+            {error ? (
+              <p className="form-message form-message--error" role="alert">
+                {error}
+              </p>
+            ) : null}
+            <Button className="auth-submit" type="submit" disabled={busy}>
+              {busy ? <LoaderCircle className="animate-spin" aria-hidden="true" /> : null}
+              {busy ? "Saving…" : "Save new password"}
+            </Button>
           </form>
         ) : null}
-        {message ? <p className="form-message form-message--success" role="status">{message}</p> : null}
-        {!checking && (!recoveryValid || message) ? <Button className="auth-submit" asChild><Link to="/auth">Go to sign in</Link></Button> : null}
+        {message ? (
+          <p className="form-message form-message--success" role="status">
+            {message}
+          </p>
+        ) : null}
+        {!checking && (!recoveryValid || message) ? (
+          <Button className="auth-submit" asChild>
+            <Link to="/auth">Go to sign in</Link>
+          </Button>
+        ) : null}
       </section>
     </main>
   );

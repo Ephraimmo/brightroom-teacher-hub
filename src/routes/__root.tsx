@@ -76,16 +76,22 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
-      // Each content route, / included, still sets its own title and description.
-      // Never add og:image or twitter:image here; leaf pages own their social previews.
+    // Each content route, / included, still sets its own title and description.
+    // Never add og:image or twitter:image here; leaf pages own their social previews.
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-        { title: "LearnBridge | Hybrid Learning" },
-        { name: "description", content: "A connected workspace for teachers, learners, schools, and families." },
-        { name: "author", content: "LearnBridge" },
-        { property: "og:title", content: "LearnBridge | Hybrid Learning" },
-        { property: "og:description", content: "A connected workspace for teaching, learning, and progress." },
+      { title: "LearnBridge | Hybrid Learning" },
+      {
+        name: "description",
+        content: "A connected workspace for teachers, learners, schools, and families.",
+      },
+      { name: "author", content: "LearnBridge" },
+      { property: "og:title", content: "LearnBridge | Hybrid Learning" },
+      {
+        property: "og:description",
+        content: "A connected workspace for teaching, learning, and progress.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },

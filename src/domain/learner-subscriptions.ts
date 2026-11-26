@@ -1,9 +1,5 @@
 export type LearnerSubscriptionStatus =
-  | "active"
-  | "pending_payment"
-  | "expired"
-  | "suspended"
-  | "cancelled";
+  "active" | "pending_payment" | "expired" | "suspended" | "cancelled";
 
 export interface LearnerSubscription {
   learnerId: string;

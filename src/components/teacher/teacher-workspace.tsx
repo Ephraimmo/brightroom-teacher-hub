@@ -44,7 +44,13 @@ interface TeacherWorkspaceProps {
   children: ReactNode;
 }
 
-export function TeacherWorkspace({ active, title, description, actions, children }: TeacherWorkspaceProps) {
+export function TeacherWorkspace({
+  active,
+  title,
+  description,
+  actions,
+  children,
+}: TeacherWorkspaceProps) {
   const { user, isLoading } = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -68,7 +74,9 @@ export function TeacherWorkspace({ active, title, description, actions, children
     <div className="app-shell">
       <aside className="workspace-sidebar" aria-label="Teacher workspace">
         <Link to="/" className="workspace-brand" aria-label="LearnBridge overview">
-          <span className="workspace-brand-mark"><GraduationCap aria-hidden="true" /></span>
+          <span className="workspace-brand-mark">
+            <GraduationCap aria-hidden="true" />
+          </span>
           <span className="workspace-brand-copy">
             <strong>LearnBridge</strong>
             <small>Teaching workspace</small>
@@ -103,7 +111,9 @@ export function TeacherWorkspace({ active, title, description, actions, children
         </nav>
 
         <div className="sidebar-bottom">
-          <div className="sidebar-help-mark"><CheckCheck aria-hidden="true" /></div>
+          <div className="sidebar-help-mark">
+            <CheckCheck aria-hidden="true" />
+          </div>
           <p>Learning, connected.</p>
           <span>Sample workspace · 2026</span>
         </div>
@@ -112,10 +122,15 @@ export function TeacherWorkspace({ active, title, description, actions, children
       <div className="workspace-main">
         <header className="workspace-topbar">
           <Link to="/" className="mobile-brand" aria-label="LearnBridge overview">
-            <span className="workspace-brand-mark"><GraduationCap aria-hidden="true" /></span>
+            <span className="workspace-brand-mark">
+              <GraduationCap aria-hidden="true" />
+            </span>
             <strong>LearnBridge</strong>
           </Link>
-          <div className="sample-status"><span className="sample-status-dot" />Sample data</div>
+          <div className="sample-status">
+            <span className="sample-status-dot" />
+            Sample data
+          </div>
           <div className="topbar-actions">
             <div className="popover-anchor">
               <Button
@@ -131,18 +146,40 @@ export function TeacherWorkspace({ active, title, description, actions, children
                 <span className="notification-indicator" />
               </Button>
               {notificationsOpen ? (
-                <section className="topbar-popover" id="teacher-notifications" aria-label="Recent notifications">
+                <section
+                  className="topbar-popover"
+                  id="teacher-notifications"
+                  aria-label="Recent notifications"
+                >
                   <div className="popover-heading">
                     <strong>Recent updates</strong>
                     <span>2 new</span>
                   </div>
-                  <Link to="/homework" className="notification-row" onClick={() => setNotificationsOpen(false)}>
-                    <span className="notification-symbol notification-symbol--amber"><ClipboardList aria-hidden="true" /></span>
-                    <span><strong>Work to review</strong><small>12 submissions need marking</small></span>
+                  <Link
+                    to="/homework"
+                    className="notification-row"
+                    onClick={() => setNotificationsOpen(false)}
+                  >
+                    <span className="notification-symbol notification-symbol--amber">
+                      <ClipboardList aria-hidden="true" />
+                    </span>
+                    <span>
+                      <strong>Work to review</strong>
+                      <small>12 submissions need marking</small>
+                    </span>
                   </Link>
-                  <Link to="/timetable" className="notification-row" onClick={() => setNotificationsOpen(false)}>
-                    <span className="notification-symbol notification-symbol--blue"><CalendarDays aria-hidden="true" /></span>
-                    <span><strong>Next lesson</strong><small>Grade 10 Mathematics · 09:30</small></span>
+                  <Link
+                    to="/timetable"
+                    className="notification-row"
+                    onClick={() => setNotificationsOpen(false)}
+                  >
+                    <span className="notification-symbol notification-symbol--blue">
+                      <CalendarDays aria-hidden="true" />
+                    </span>
+                    <span>
+                      <strong>Next lesson</strong>
+                      <small>Grade 10 Mathematics · 09:30</small>
+                    </span>
                   </Link>
                 </section>
               ) : null}
@@ -161,8 +198,14 @@ export function TeacherWorkspace({ active, title, description, actions, children
                   <span className="account-email">{user.email ?? "Your account"}</span>
                 </Button>
                 {accountOpen ? (
-                  <div className="topbar-popover account-popover" role="menu" aria-label="Account options">
-                    <Link to="/account" role="menuitem" onClick={() => setAccountOpen(false)}>My profile</Link>
+                  <div
+                    className="topbar-popover account-popover"
+                    role="menu"
+                    aria-label="Account options"
+                  >
+                    <Link to="/account" role="menuitem" onClick={() => setAccountOpen(false)}>
+                      My profile
+                    </Link>
                     <Button variant="ghost" type="button" role="menuitem" onClick={handleSignOut}>
                       <LogOut aria-hidden="true" /> Sign out
                     </Button>
@@ -170,9 +213,13 @@ export function TeacherWorkspace({ active, title, description, actions, children
                 ) : null}
               </div>
             ) : isLoading ? (
-              <span className="auth-checking" role="status">Checking account…</span>
+              <span className="auth-checking" role="status">
+                Checking account…
+              </span>
             ) : (
-              <Button variant="outline" size="sm" asChild><Link to="/auth">Sign in</Link></Button>
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/auth">Sign in</Link>
+              </Button>
             )}
           </div>
         </header>
@@ -189,7 +236,11 @@ export function TeacherWorkspace({ active, title, description, actions, children
           <div className="sample-notice">
             Sample workspace. Names, schedules, and progress are example data, not school records.
           </div>
-          {signOutMessage ? <p className="inline-error" role="alert">{signOutMessage}</p> : null}
+          {signOutMessage ? (
+            <p className="inline-error" role="alert">
+              {signOutMessage}
+            </p>
+          ) : null}
           {children}
         </main>
       </div>

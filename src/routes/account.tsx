@@ -16,7 +16,10 @@ export const Route = createFileRoute("/account")({
       { title: "My Profile | LearnBridge" },
       { name: "description", content: "Review and update your LearnBridge profile details." },
       { property: "og:title", content: "My Profile | LearnBridge" },
-      { property: "og:description", content: "Manage your own account profile and see assigned access." },
+      {
+        property: "og:description",
+        content: "Manage your own account profile and see assigned access.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -61,7 +64,10 @@ function AccountPage() {
     enabled: Boolean(user),
     queryFn: async () => {
       if (!user) throw new Error("Sign in to view account access.");
-      const { data, error } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id);
       if (error) throw error;
       return data;
     },
@@ -103,7 +109,11 @@ function AccountPage() {
   }
 
   if (isLoading) {
-    return <main className="auth-page"><p role="status">Checking your account…</p></main>;
+    return (
+      <main className="auth-page">
+        <p role="status">Checking your account…</p>
+      </main>
+    );
   }
 
   if (!user) {
@@ -112,8 +122,12 @@ function AccountPage() {
         <section className="reset-panel">
           <p className="page-eyebrow">MY PROFILE</p>
           <h1>Sign in to continue</h1>
-          <p className="page-description">Your account details are private and only available after you sign in.</p>
-          <Button className="auth-submit" asChild><Link to="/auth">Sign in</Link></Button>
+          <p className="page-description">
+            Your account details are private and only available after you sign in.
+          </p>
+          <Button className="auth-submit" asChild>
+            <Link to="/auth">Sign in</Link>
+          </Button>
         </section>
       </main>
     );
@@ -122,34 +136,96 @@ function AccountPage() {
   const roles = rolesQuery.data ?? [];
 
   return (
-    <TeacherWorkspace active="overview" title="My profile" description="Update your details and review the access assigned to your account.">
+    <TeacherWorkspace
+      active="overview"
+      title="My profile"
+      description="Update your details and review the access assigned to your account."
+    >
       <div className="account-grid">
         <section className="workspace-panel account-panel">
-          <div className="section-heading"><div><p className="section-eyebrow">YOUR DETAILS</p><h2>Profile information</h2></div></div>
+          <div className="section-heading">
+            <div>
+              <p className="section-eyebrow">YOUR DETAILS</p>
+              <h2>Profile information</h2>
+            </div>
+          </div>
           {profileQuery.isLoading ? <p role="status">Loading your profile…</p> : null}
-          {profileQuery.isError ? <p className="form-message form-message--error" role="alert">Your profile could not be loaded.</p> : null}
+          {profileQuery.isError ? (
+            <p className="form-message form-message--error" role="alert">
+              Your profile could not be loaded.
+            </p>
+          ) : null}
           {profileQuery.data ? (
             <form className="auth-form" onSubmit={handleSave}>
-              <div className="form-field"><Label htmlFor="profile-full-name">Full name</Label><Input id="profile-full-name" value={fullName} onChange={(event) => setFullName(event.currentTarget.value)} maxLength={100} required /></div>
-              <div className="form-field"><Label htmlFor="profile-display-name">Display name</Label><Input id="profile-display-name" value={displayName} onChange={(event) => setDisplayName(event.currentTarget.value)} maxLength={60} /></div>
-              {feedback ? <p className="form-message form-message--success" role="status">{feedback}</p> : null}
-              {saveError ? <p className="form-message form-message--error" role="alert">{saveError}</p> : null}
-              <Button type="submit" disabled={updateProfile.isPending}>{updateProfile.isPending ? "Saving…" : "Save changes"}</Button>
+              <div className="form-field">
+                <Label htmlFor="profile-full-name">Full name</Label>
+                <Input
+                  id="profile-full-name"
+                  value={fullName}
+                  onChange={(event) => setFullName(event.currentTarget.value)}
+                  maxLength={100}
+                  required
+                />
+              </div>
+              <div className="form-field">
+                <Label htmlFor="profile-display-name">Display name</Label>
+                <Input
+                  id="profile-display-name"
+                  value={displayName}
+                  onChange={(event) => setDisplayName(event.currentTarget.value)}
+                  maxLength={60}
+                />
+              </div>
+              {feedback ? (
+                <p className="form-message form-message--success" role="status">
+                  {feedback}
+                </p>
+              ) : null}
+              {saveError ? (
+                <p className="form-message form-message--error" role="alert">
+                  {saveError}
+                </p>
+              ) : null}
+              <Button type="submit" disabled={updateProfile.isPending}>
+                {updateProfile.isPending ? "Saving…" : "Save changes"}
+              </Button>
             </form>
           ) : null}
         </section>
 
         <section className="workspace-panel account-panel">
-          <div className="section-heading"><div><p className="section-eyebrow">ACCOUNT ACCESS</p><h2>Your role</h2></div></div>
+          <div className="section-heading">
+            <div>
+              <p className="section-eyebrow">ACCOUNT ACCESS</p>
+              <h2>Your role</h2>
+            </div>
+          </div>
           {rolesQuery.isLoading ? <p role="status">Checking assigned access…</p> : null}
-          {rolesQuery.isError ? <p className="form-message form-message--error" role="alert">Assigned access could not be loaded.</p> : null}
+          {rolesQuery.isError ? (
+            <p className="form-message form-message--error" role="alert">
+              Assigned access could not be loaded.
+            </p>
+          ) : null}
           {roles.length > 0 ? (
-            <ul className="role-list">{roles.map(({ role }) => <li key={role}>{roleLabels[role]}</li>)}</ul>
+            <ul className="role-list">
+              {roles.map(({ role }) => (
+                <li key={role}>{roleLabels[role]}</li>
+              ))}
+            </ul>
           ) : null}
           {!rolesQuery.isLoading && !rolesQuery.isError && roles.length === 0 ? (
-            <div className="role-pending"><span className="role-pending-mark" /><strong>Access is not assigned yet</strong><p>A school or platform administrator must assign your role. New users cannot grant themselves school access.</p></div>
+            <div className="role-pending">
+              <span className="role-pending-mark" />
+              <strong>Access is not assigned yet</strong>
+              <p>
+                A school or platform administrator must assign your role. New users cannot grant
+                themselves school access.
+              </p>
+            </div>
           ) : null}
-          <p className="account-email-note">Signed in as <strong>{user.email ?? "your account"}</strong></p>
+          <p className="account-email-note">
+            Signed in as <strong>{user.email ?? "your account"}</strong>
+          </p>
         </section>
       </div>
     </TeacherWorkspace>
