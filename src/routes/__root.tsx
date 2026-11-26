@@ -1,67 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  Outlet,
-  Link,
-  createRootRouteWithContext,
-  useRouter,
-  HeadContent,
-  Scripts,
-  type ErrorComponentProps,
-} from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { Outlet, createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
+import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import { ErrorScreen, NotFoundScreen } from "@/components/app-shell/error-screens";
 import { AuthProvider } from "@/components/auth/auth-provider";
-import { StatusPage } from "@/components/design/status-page";
-import { Button } from "@/components/ui/button";
-
-function NotFoundComponent() {
-  return (
-    <StatusPage
-      kind="not-found"
-      code="404"
-      title="Page not found"
-      description="The page you're looking for doesn't exist or has moved."
-      actions={
-        <Button asChild>
-          <Link to="/">Go to my home page</Link>
-        </Button>
-      }
-    />
-  );
-}
-
-function ErrorComponent({ error, reset }: ErrorComponentProps) {
-  console.error(error);
-  const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
-
-  return (
-    <StatusPage
-      kind="error"
-      title="This page didn't load"
-      description="Something went wrong on our side. You can try again or go back to your home page."
-      actions={
-        <>
-          <Button
-            onClick={() => {
-              void router.invalidate();
-              reset();
-            }}
-          >
-            Try again
-          </Button>
-          <Button variant="outline" asChild>
-            <a href="/">Go to my home page</a>
-          </Button>
-        </>
-      }
-    />
-  );
-}
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
@@ -101,8 +44,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   }),
   shellComponent: RootShell,
   component: RootComponent,
-  notFoundComponent: NotFoundComponent,
-  errorComponent: ErrorComponent,
+  notFoundComponent: NotFoundScreen,
+  errorComponent: ErrorScreen,
 });
 
 function RootShell({ children }: { children: ReactNode }) {
