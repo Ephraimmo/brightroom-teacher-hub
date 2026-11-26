@@ -1799,3 +1799,94 @@
     animation-duration: 0.01ms !important;
   }
 }
+
+/*
+ * Design system building blocks (src/components/design, shown at /design-system).
+ * New text here is 12px or larger; see docs/design-system.md.
+ */
+.status-pill--success {
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+.status-pill--info {
+  color: var(--info);
+  background: var(--info-soft);
+}
+
+.status-pill--danger {
+  color: var(--destructive);
+  background: var(--coral-soft);
+}
+
+.form-required {
+  color: var(--destructive);
+}
+
+.form-hint,
+.form-error {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.form-hint {
+  color: var(--muted-foreground);
+}
+
+.form-error {
+  color: var(--destructive);
+  font-weight: 600;
+}
+
+.loading-state {
+  display: grid;
+  gap: 10px;
+}
+
+.state-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 28px 16px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--muted-foreground);
+  background: var(--card);
+  text-align: center;
+}
+
+.state-panel > svg {
+  width: 26px;
+  height: 26px;
+}
+
+.state-panel h3 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.state-panel p {
+  max-width: 420px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.state-panel-action {
+  margin-top: 6px;
+}
+
+.state-panel--error {
+  border-style: solid;
+  border-color: var(--coral);
+  background: var(--coral-soft);
+}
+
+.state-panel--error > svg,
+.state-panel--error h3 {
+  color: var(--destructive);
+}

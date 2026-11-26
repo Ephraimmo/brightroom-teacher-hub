@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ClassesRouteImport } from './routes/classes'
+import { Route as DesignSystemRouteImport } from './routes/design-system'
 import { Route as HomeworkRouteImport } from './routes/homework'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResourcesRouteImport } from './routes/resources'
@@ -36,6 +37,11 @@ const AuthRoute = AuthRouteImport.update({
 const ClassesRoute = ClassesRouteImport.update({
   id: '/classes',
   path: '/classes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignSystemRoute = DesignSystemRouteImport.update({
+  id: '/design-system',
+  path: '/design-system',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeworkRoute = HomeworkRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/classes': typeof ClassesRoute
+  '/design-system': typeof DesignSystemRoute
   '/homework': typeof HomeworkRoute
   '/reset-password': typeof ResetPasswordRoute
   '/resources': typeof ResourcesRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/classes': typeof ClassesRoute
+  '/design-system': typeof DesignSystemRoute
   '/homework': typeof HomeworkRoute
   '/reset-password': typeof ResetPasswordRoute
   '/resources': typeof ResourcesRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/classes': typeof ClassesRoute
+  '/design-system': typeof DesignSystemRoute
   '/homework': typeof HomeworkRoute
   '/reset-password': typeof ResetPasswordRoute
   '/resources': typeof ResourcesRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/auth'
     | '/classes'
+    | '/design-system'
     | '/homework'
     | '/reset-password'
     | '/resources'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/auth'
     | '/classes'
+    | '/design-system'
     | '/homework'
     | '/reset-password'
     | '/resources'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/auth'
     | '/classes'
+    | '/design-system'
     | '/homework'
     | '/reset-password'
     | '/resources'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   AuthRoute: typeof AuthRoute
   ClassesRoute: typeof ClassesRoute
+  DesignSystemRoute: typeof DesignSystemRoute
   HomeworkRoute: typeof HomeworkRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ResourcesRoute: typeof ResourcesRoute
@@ -162,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/classes'
       fullPath: '/classes'
       preLoaderRoute: typeof ClassesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/design-system': {
+      id: '/design-system'
+      path: '/design-system'
+      fullPath: '/design-system'
+      preLoaderRoute: typeof DesignSystemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/homework': {
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   AuthRoute: AuthRoute,
   ClassesRoute: ClassesRoute,
+  DesignSystemRoute: DesignSystemRoute,
   HomeworkRoute: HomeworkRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ResourcesRoute: ResourcesRoute,
