@@ -4,10 +4,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Enums } from "@/integrations/supabase/types";
 
 import { useAuth } from "@/components/auth/auth-provider";
-import { TeacherWorkspace } from "@/components/teacher/teacher-workspace";
+import { AppShell } from "@/components/app-shell/app-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { orderedRoles } from "@/domain/navigation";
+import { useUserRoles } from "@/hooks/use-user-roles";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/account")({
@@ -59,19 +61,7 @@ function AccountPage() {
     },
   });
 
-  const rolesQuery = useQuery({
-    queryKey: ["user-roles", user?.id ?? "signed-out"],
-    enabled: Boolean(user),
-    queryFn: async () => {
-      if (!user) throw new Error("Sign in to view account access.");
-      const { data, error } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id);
-      if (error) throw error;
-      return data;
-    },
-  });
+  const rolesQuery = useUserRoles();
 
   const updateProfile = useMutation({
     mutationFn: async (profile: { full_name: string; display_name: string }) => {
@@ -134,10 +124,13 @@ function AccountPage() {
   }
 
   const roles = rolesQuery.data ?? [];
+  // Show the menu of the user's main role, so the profile sits inside their own area.
+  const shellRole = orderedRoles(roles.map((r) => r.role))[0] ?? null;
 
   return (
-    <TeacherWorkspace
-      active="overview"
+    <AppShell
+      role={shellRole}
+      eyebrow="MY ACCOUNT"
       title="My profile"
       description="Update your details and review the access assigned to your account."
     >
@@ -228,6 +221,6 @@ function AccountPage() {
           </p>
         </section>
       </div>
-    </TeacherWorkspace>
+    </AppShell>
   );
 }

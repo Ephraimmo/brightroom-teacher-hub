@@ -67,6 +67,26 @@ Tailwind's 4px scale: `1` = 4px, `2` = 8px, `3` = 12px, `4` = 16px, `6` = 24px, 
 
 **Every list or data panel shows exactly one of: loading, empty, error, or the data.** Never a blank area.
 
+## App shell and navigation
+
+Every signed-in page sits in **`AppShell`** (`src/components/app-shell/app-shell.tsx`): sidebar on desktop and tablet, top bar with the role switcher (for people with more than one role) and account menu, and a bottom tab bar on phones.
+
+| Role           | Area      | Menu today                                                      |
+| -------------- | --------- | --------------------------------------------------------------- |
+| Teacher        | `/teach`  | Overview, classes, timetable, resources, homework (sample data) |
+| School admin   | `/school` | Home ("being built" until P4-02)                                |
+| Platform admin | `/admin`  | Home (until P4-01)                                              |
+| Learner        | `/learn`  | Home (until P4-04)                                              |
+| Parent         | `/family` | Home (until P4-05)                                              |
+
+- `/` sends each signed-in person to their area; with several roles, the most senior one (platform admin → school admin → teacher → parent → learner). No role yet → `/access-pending`. Signed out → `/auth`.
+- Each area's layout route wraps its pages in `RoleAreaGuard`, which shows a "no access" page to anyone without that role. This is a convenience, not security: the database and, from P2-03, server-side checks are what protect data.
+- Old teacher addresses (`/classes`, `/timetable`, `/resources`, `/homework`) redirect to `/teach/...`.
+
+**To add a page to a role's menu:** create the route file inside the area (e.g. `src/routes/school.learners.tsx`), render it in `AppShell` with that role, and add an item to `NAVIGATION` in `src/domain/navigation.ts`. A test fails if a menu item points to a page that doesn't exist, or if a phone menu has more than five tabs.
+
+Full-page messages (checking the account, 404, error, no access, waiting for a role) use **`StatusPage`**.
+
 ## Responsive rules
 
 Design for a phone first: many families use a phone on mobile data.

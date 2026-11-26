@@ -1890,3 +1890,97 @@
 .state-panel--error h3 {
   color: var(--destructive);
 }
+
+/* App shell (P1-03): full-page status screens and the role switcher. */
+.status-page {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: var(--background);
+}
+
+.status-page-body {
+  display: flex;
+  max-width: 480px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.status-page-icon {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  margin-bottom: 16px;
+  border-radius: 14px;
+  color: var(--primary);
+  background: var(--secondary);
+}
+
+.status-page-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.status-page[data-kind="error"] .status-page-icon {
+  color: var(--destructive);
+  background: var(--coral-soft);
+}
+
+.status-page[data-kind="forbidden"] .status-page-icon,
+.status-page[data-kind="pending"] .status-page-icon {
+  color: var(--warning);
+  background: var(--warning-soft);
+}
+
+.status-page-code {
+  margin: 0 0 6px;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status-page h1 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.status-page-description {
+  margin: 10px 0 0;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.status-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.role-switcher select {
+  height: 36px;
+  max-width: 160px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--foreground);
+  background: var(--card);
+  font: inherit;
+  font-size: 13px;
+}
+
+.role-switcher select:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}

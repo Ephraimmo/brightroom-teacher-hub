@@ -1,23 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { TeacherResourcesPage } from "@/components/teacher/teacher-pages";
-
+// Moved to /teach/resources (P1-03). Kept so old links and bookmarks still work.
 export const Route = createFileRoute("/resources")({
-  head: () => ({
-    meta: [
-      { title: "Learning Resources | LearnBridge" },
-      {
-        name: "description",
-        content: "Browse sample teacher notes, worksheets, study guides, and past papers.",
-      },
-      { property: "og:title", content: "Learning Resources | LearnBridge" },
-      {
-        property: "og:description",
-        content: "A searchable sample library organized by class and subject.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: TeacherResourcesPage,
+  beforeLoad: () => {
+    throw redirect({ to: "/teach/resources", replace: true });
+  },
 });

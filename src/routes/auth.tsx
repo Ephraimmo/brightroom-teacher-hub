@@ -90,7 +90,7 @@ function AuthPage() {
         setError("Email or password was not accepted. Please try again.");
         return;
       }
-      await navigate({ to: "/account" });
+      await navigate({ to: "/" });
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -111,7 +111,7 @@ function AuthPage() {
         return;
       }
       if (result.redirected) return;
-      await navigate({ to: "/account" });
+      await navigate({ to: "/" });
     } catch {
       setError("Sign-in could not start. Please try again.");
       setBusy(false);

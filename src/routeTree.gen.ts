@@ -10,23 +10,48 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccessPendingRouteImport } from './routes/access-pending'
 import { Route as AccountRouteImport } from './routes/account'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ClassesRouteImport } from './routes/classes'
 import { Route as DesignSystemRouteImport } from './routes/design-system'
+import { Route as FamilyRouteImport } from './routes/family'
 import { Route as HomeworkRouteImport } from './routes/homework'
+import { Route as LearnRouteImport } from './routes/learn'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as SchoolRouteImport } from './routes/school'
+import { Route as TeachRouteImport } from './routes/teach'
 import { Route as TimetableRouteImport } from './routes/timetable'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as FamilyIndexRouteImport } from './routes/family.index'
+import { Route as LearnIndexRouteImport } from './routes/learn.index'
+import { Route as SchoolIndexRouteImport } from './routes/school.index'
+import { Route as TeachIndexRouteImport } from './routes/teach.index'
+import { Route as TeachClassesRouteImport } from './routes/teach.classes'
+import { Route as TeachHomeworkRouteImport } from './routes/teach.homework'
+import { Route as TeachResourcesRouteImport } from './routes/teach.resources'
+import { Route as TeachTimetableRouteImport } from './routes/teach.timetable'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccessPendingRoute = AccessPendingRouteImport.update({
+  id: '/access-pending',
+  path: '/access-pending',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -44,9 +69,19 @@ const DesignSystemRoute = DesignSystemRouteImport.update({
   path: '/design-system',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FamilyRoute = FamilyRouteImport.update({
+  id: '/family',
+  path: '/family',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HomeworkRoute = HomeworkRouteImport.update({
   id: '/homework',
   path: '/homework',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -59,25 +94,96 @@ const ResourcesRoute = ResourcesRouteImport.update({
   path: '/resources',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SchoolRoute = SchoolRouteImport.update({
+  id: '/school',
+  path: '/school',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeachRoute = TeachRouteImport.update({
+  id: '/teach',
+  path: '/teach',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TimetableRoute = TimetableRouteImport.update({
   id: '/timetable',
   path: '/timetable',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const FamilyIndexRoute = FamilyIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => FamilyRoute,
+} as any)
+const LearnIndexRoute = LearnIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LearnRoute,
+} as any)
+const SchoolIndexRoute = SchoolIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SchoolRoute,
+} as any)
+const TeachIndexRoute = TeachIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TeachRoute,
+} as any)
+const TeachClassesRoute = TeachClassesRouteImport.update({
+  id: '/classes',
+  path: '/classes',
+  getParentRoute: () => TeachRoute,
+} as any)
+const TeachHomeworkRoute = TeachHomeworkRouteImport.update({
+  id: '/homework',
+  path: '/homework',
+  getParentRoute: () => TeachRoute,
+} as any)
+const TeachResourcesRoute = TeachResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => TeachRoute,
+} as any)
+const TeachTimetableRoute = TeachTimetableRouteImport.update({
+  id: '/timetable',
+  path: '/timetable',
+  getParentRoute: () => TeachRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/access-pending': typeof AccessPendingRoute
   '/account': typeof AccountRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/classes': typeof ClassesRoute
   '/design-system': typeof DesignSystemRoute
+  '/family': typeof FamilyRouteWithChildren
   '/homework': typeof HomeworkRoute
+  '/learn': typeof LearnRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/resources': typeof ResourcesRoute
+  '/school': typeof SchoolRouteWithChildren
+  '/teach': typeof TeachRouteWithChildren
   '/timetable': typeof TimetableRoute
+  '/teach/classes': typeof TeachClassesRoute
+  '/teach/homework': typeof TeachHomeworkRoute
+  '/teach/resources': typeof TeachResourcesRoute
+  '/teach/timetable': typeof TeachTimetableRoute
+  '/admin/': typeof AdminIndexRoute
+  '/family/': typeof FamilyIndexRoute
+  '/learn/': typeof LearnIndexRoute
+  '/school/': typeof SchoolIndexRoute
+  '/teach/': typeof TeachIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/access-pending': typeof AccessPendingRoute
   '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/classes': typeof ClassesRoute
@@ -86,34 +192,74 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/resources': typeof ResourcesRoute
   '/timetable': typeof TimetableRoute
+  '/teach/classes': typeof TeachClassesRoute
+  '/teach/homework': typeof TeachHomeworkRoute
+  '/teach/resources': typeof TeachResourcesRoute
+  '/teach/timetable': typeof TeachTimetableRoute
+  '/admin': typeof AdminIndexRoute
+  '/family': typeof FamilyIndexRoute
+  '/learn': typeof LearnIndexRoute
+  '/school': typeof SchoolIndexRoute
+  '/teach': typeof TeachIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/access-pending': typeof AccessPendingRoute
   '/account': typeof AccountRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/classes': typeof ClassesRoute
   '/design-system': typeof DesignSystemRoute
+  '/family': typeof FamilyRouteWithChildren
   '/homework': typeof HomeworkRoute
+  '/learn': typeof LearnRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/resources': typeof ResourcesRoute
+  '/school': typeof SchoolRouteWithChildren
+  '/teach': typeof TeachRouteWithChildren
   '/timetable': typeof TimetableRoute
+  '/teach/classes': typeof TeachClassesRoute
+  '/teach/homework': typeof TeachHomeworkRoute
+  '/teach/resources': typeof TeachResourcesRoute
+  '/teach/timetable': typeof TeachTimetableRoute
+  '/admin/': typeof AdminIndexRoute
+  '/family/': typeof FamilyIndexRoute
+  '/learn/': typeof LearnIndexRoute
+  '/school/': typeof SchoolIndexRoute
+  '/teach/': typeof TeachIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/access-pending'
     | '/account'
+    | '/admin'
     | '/auth'
     | '/classes'
     | '/design-system'
+    | '/family'
     | '/homework'
+    | '/learn'
     | '/reset-password'
     | '/resources'
+    | '/school'
+    | '/teach'
     | '/timetable'
+    | '/teach/classes'
+    | '/teach/homework'
+    | '/teach/resources'
+    | '/teach/timetable'
+    | '/admin/'
+    | '/family/'
+    | '/learn/'
+    | '/school/'
+    | '/teach/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/access-pending'
     | '/account'
     | '/auth'
     | '/classes'
@@ -122,28 +268,58 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/resources'
     | '/timetable'
+    | '/teach/classes'
+    | '/teach/homework'
+    | '/teach/resources'
+    | '/teach/timetable'
+    | '/admin'
+    | '/family'
+    | '/learn'
+    | '/school'
+    | '/teach'
   id:
     | '__root__'
     | '/'
+    | '/access-pending'
     | '/account'
+    | '/admin'
     | '/auth'
     | '/classes'
     | '/design-system'
+    | '/family'
     | '/homework'
+    | '/learn'
     | '/reset-password'
     | '/resources'
+    | '/school'
+    | '/teach'
     | '/timetable'
+    | '/teach/classes'
+    | '/teach/homework'
+    | '/teach/resources'
+    | '/teach/timetable'
+    | '/admin/'
+    | '/family/'
+    | '/learn/'
+    | '/school/'
+    | '/teach/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccessPendingRoute: typeof AccessPendingRoute
   AccountRoute: typeof AccountRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   ClassesRoute: typeof ClassesRoute
   DesignSystemRoute: typeof DesignSystemRoute
+  FamilyRoute: typeof FamilyRouteWithChildren
   HomeworkRoute: typeof HomeworkRoute
+  LearnRoute: typeof LearnRouteWithChildren
   ResetPasswordRoute: typeof ResetPasswordRoute
   ResourcesRoute: typeof ResourcesRoute
+  SchoolRoute: typeof SchoolRouteWithChildren
+  TeachRoute: typeof TeachRouteWithChildren
   TimetableRoute: typeof TimetableRoute
 }
 
@@ -156,11 +332,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/access-pending': {
+      id: '/access-pending'
+      path: '/access-pending'
+      fullPath: '/access-pending'
+      preLoaderRoute: typeof AccessPendingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account': {
       id: '/account'
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -184,11 +374,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesignSystemRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/family': {
+      id: '/family'
+      path: '/family'
+      fullPath: '/family'
+      preLoaderRoute: typeof FamilyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/homework': {
       id: '/homework'
       path: '/homework'
       fullPath: '/homework'
       preLoaderRoute: typeof HomeworkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -205,6 +409,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResourcesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/school': {
+      id: '/school'
+      path: '/school'
+      fullPath: '/school'
+      preLoaderRoute: typeof SchoolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/teach': {
+      id: '/teach'
+      path: '/teach'
+      fullPath: '/teach'
+      preLoaderRoute: typeof TeachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/timetable': {
       id: '/timetable'
       path: '/timetable'
@@ -212,18 +430,147 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TimetableRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/family/': {
+      id: '/family/'
+      path: '/'
+      fullPath: '/family/'
+      preLoaderRoute: typeof FamilyIndexRouteImport
+      parentRoute: typeof FamilyRoute
+    }
+    '/learn/': {
+      id: '/learn/'
+      path: '/'
+      fullPath: '/learn/'
+      preLoaderRoute: typeof LearnIndexRouteImport
+      parentRoute: typeof LearnRoute
+    }
+    '/school/': {
+      id: '/school/'
+      path: '/'
+      fullPath: '/school/'
+      preLoaderRoute: typeof SchoolIndexRouteImport
+      parentRoute: typeof SchoolRoute
+    }
+    '/teach/': {
+      id: '/teach/'
+      path: '/'
+      fullPath: '/teach/'
+      preLoaderRoute: typeof TeachIndexRouteImport
+      parentRoute: typeof TeachRoute
+    }
+    '/teach/classes': {
+      id: '/teach/classes'
+      path: '/classes'
+      fullPath: '/teach/classes'
+      preLoaderRoute: typeof TeachClassesRouteImport
+      parentRoute: typeof TeachRoute
+    }
+    '/teach/homework': {
+      id: '/teach/homework'
+      path: '/homework'
+      fullPath: '/teach/homework'
+      preLoaderRoute: typeof TeachHomeworkRouteImport
+      parentRoute: typeof TeachRoute
+    }
+    '/teach/resources': {
+      id: '/teach/resources'
+      path: '/resources'
+      fullPath: '/teach/resources'
+      preLoaderRoute: typeof TeachResourcesRouteImport
+      parentRoute: typeof TeachRoute
+    }
+    '/teach/timetable': {
+      id: '/teach/timetable'
+      path: '/timetable'
+      fullPath: '/teach/timetable'
+      preLoaderRoute: typeof TeachTimetableRouteImport
+      parentRoute: typeof TeachRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface FamilyRouteChildren {
+  FamilyIndexRoute: typeof FamilyIndexRoute
+}
+
+const FamilyRouteChildren: FamilyRouteChildren = {
+  FamilyIndexRoute: FamilyIndexRoute,
+}
+
+const FamilyRouteWithChildren =
+  FamilyRoute._addFileChildren(FamilyRouteChildren)
+
+interface LearnRouteChildren {
+  LearnIndexRoute: typeof LearnIndexRoute
+}
+
+const LearnRouteChildren: LearnRouteChildren = {
+  LearnIndexRoute: LearnIndexRoute,
+}
+
+const LearnRouteWithChildren = LearnRoute._addFileChildren(LearnRouteChildren)
+
+interface SchoolRouteChildren {
+  SchoolIndexRoute: typeof SchoolIndexRoute
+}
+
+const SchoolRouteChildren: SchoolRouteChildren = {
+  SchoolIndexRoute: SchoolIndexRoute,
+}
+
+const SchoolRouteWithChildren =
+  SchoolRoute._addFileChildren(SchoolRouteChildren)
+
+interface TeachRouteChildren {
+  TeachClassesRoute: typeof TeachClassesRoute
+  TeachHomeworkRoute: typeof TeachHomeworkRoute
+  TeachResourcesRoute: typeof TeachResourcesRoute
+  TeachTimetableRoute: typeof TeachTimetableRoute
+  TeachIndexRoute: typeof TeachIndexRoute
+}
+
+const TeachRouteChildren: TeachRouteChildren = {
+  TeachClassesRoute: TeachClassesRoute,
+  TeachHomeworkRoute: TeachHomeworkRoute,
+  TeachResourcesRoute: TeachResourcesRoute,
+  TeachTimetableRoute: TeachTimetableRoute,
+  TeachIndexRoute: TeachIndexRoute,
+}
+
+const TeachRouteWithChildren = TeachRoute._addFileChildren(TeachRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccessPendingRoute: AccessPendingRoute,
   AccountRoute: AccountRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   ClassesRoute: ClassesRoute,
   DesignSystemRoute: DesignSystemRoute,
+  FamilyRoute: FamilyRouteWithChildren,
   HomeworkRoute: HomeworkRoute,
+  LearnRoute: LearnRouteWithChildren,
   ResetPasswordRoute: ResetPasswordRoute,
   ResourcesRoute: ResourcesRoute,
+  SchoolRoute: SchoolRouteWithChildren,
+  TeachRoute: TeachRouteWithChildren,
   TimetableRoute: TimetableRoute,
 }
 export const routeTree = rootRouteImport

@@ -24,7 +24,7 @@ import {
   teacherSampleLessons,
   teacherSampleResources,
 } from "@/domain/teacher-sample-data";
-import { TeacherWorkspace, type WorkspaceSection } from "@/components/teacher/teacher-workspace";
+import { TeacherWorkspace } from "@/components/teacher/teacher-workspace";
 
 const statCards = [
   {
@@ -221,12 +221,11 @@ export function TeacherOverview() {
   const [search, setSearch] = useState("");
   return (
     <TeacherWorkspace
-      active="overview"
       title="Your teaching day"
       description="A clear view of classes, learner progress, and work that needs your attention."
       actions={
         <Button variant="outline" asChild>
-          <Link to="/timetable">
+          <Link to="/teach/timetable">
             Open timetable <ArrowRight aria-hidden="true" />
           </Link>
         </Button>
@@ -246,7 +245,7 @@ export function TeacherOverview() {
               <h2>Today’s lessons</h2>
             </div>
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/timetable">
+              <Link to="/teach/timetable">
                 Full week <ArrowRight aria-hidden="true" />
               </Link>
             </Button>
@@ -266,7 +265,7 @@ export function TeacherOverview() {
           <p className="panel-intro">A few quick reviews will keep your classes moving.</p>
           <AssignmentRows filter="marking" />
           <Button variant="outline" className="panel-footer-action" asChild>
-            <Link to="/homework">
+            <Link to="/teach/homework">
               Review homework <ArrowRight aria-hidden="true" />
             </Link>
           </Button>
@@ -296,7 +295,7 @@ export function TeacherOverview() {
               <h2>Class overview</h2>
             </div>
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/classes">
+              <Link to="/teach/classes">
                 All classes <ArrowRight aria-hidden="true" />
               </Link>
             </Button>
@@ -339,12 +338,11 @@ export function TeacherClassesPage() {
 
   return (
     <TeacherWorkspace
-      active="classes"
       title="My classes"
       description="Your groups, subjects, and learner attendance at a glance."
       actions={
         <Button variant="outline" asChild>
-          <Link to="/timetable">
+          <Link to="/teach/timetable">
             View timetable <CalendarClock aria-hidden="true" />
           </Link>
         </Button>
@@ -404,7 +402,6 @@ export function TeacherTimetablePage() {
 
   return (
     <TeacherWorkspace
-      active="timetable"
       title="Timetable"
       description="Plan your teaching week and see each lesson’s time and location."
     >
@@ -466,7 +463,6 @@ export function TeacherResourcesPage() {
   );
   return (
     <TeacherWorkspace
-      active="resources"
       title="Learning resources"
       description="A sample library of notes and revision material organized by class."
     >
@@ -514,7 +510,6 @@ export function TeacherHomeworkPage() {
 
   return (
     <TeacherWorkspace
-      active="homework"
       title="Homework & tests"
       description="Keep track of upcoming work and submissions from your classes."
     >
