@@ -13,3 +13,5 @@ src/integrations/supabase/
 src/integrations/lovable/
 # Contains a Lovable-managed block
 AGENTS.md
+test-results
+playwright-report
