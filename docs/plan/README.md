@@ -17,6 +17,7 @@ This folder is the technical plan for the hybrid learning platform. It answers s
 | 8   | [Testing](08-testing.md)                         | How each part is checked, including the 28 acceptance tests                                                     |
 | 9   | [Deployment](09-deployment.md)                   | Environments, releases, monitoring and backups                                                                  |
 | 10  | [Costs](10-costs.md)                             | Monthly running costs at 300, 5,000 and 50,000 learners                                                         |
+| 11  | [User journeys](11-user-journeys.md)             | How each role moves from registration to teaching, homework, exams, payment and reporting                       |
 
 ---
 
