@@ -1,0 +1,35 @@
+# Database changes waiting for Lovable
+
+Lovable owns the database schema (`drizzle/` and `supabase/migrations/`; see `AGENTS.md`). Each database change is written and tested here first, then applied **through Lovable**.
+
+| File                        | Task  | Status                |
+| --------------------------- | ----- | --------------------- |
+| `P2-03-role-assignment.sql` | P2-03 | Waiting to be applied |
+
+## How a change is tested
+
+`src/test/db/harness.ts` starts a throw-away Postgres in memory (PGlite), sets it up like Lovable Cloud (the `anon`, `authenticated` and `service_role` roles, `auth.users`, `auth.uid()`), runs the migrations already applied, then the pending file. The tests sign in as different users and check what the **database** allows. Run them with `npm run test`.
+
+## How to apply one
+
+1. In Lovable, open the chat and paste:
+
+   > Please apply this SQL as a new database migration exactly as written, without changes, then regenerate the Supabase types. It adds an audit log and secure functions for platform admins to assign roles.
+   >
+   > _(then paste the whole contents of the `.sql` file)_
+
+2. Lovable will ask you to approve the migration. Approve it.
+3. Check that Lovable pushed to GitHub: `drizzle/migrations/` (or `supabase/migrations/`) has the new file, and `src/integrations/supabase/types.ts` mentions `admin_grant_role`.
+4. Tell Claude it's applied. The file is then marked as applied here, and the next step (the screens that use it) can be built.
+
+## After P2-03 is applied: make yourself the first platform admin
+
+Only a platform admin can give out roles, so the first one has to be set by hand, once. In **Lovable → Cloud → Database → SQL editor**, run this with your own email:
+
+```sql
+insert into public.user_roles (user_id, role)
+select id, 'platform_admin' from auth.users where email = 'YOUR-EMAIL-HERE'
+on conflict do nothing;
+```
+
+From then on, give and remove roles in the app (**Admin → People**). Every change is written to the audit log with your reason.
