@@ -79,7 +79,7 @@ Every signed-in page sits in **`AppShell`** (`src/components/app-shell/app-shell
 | Learner        | `/learn`  | Home (until P4-04)                                              |
 | Parent         | `/family` | Home (until P4-05)                                              |
 
-- `/` sends each signed-in person to their area; with several roles, the most senior one (platform admin → school admin → teacher → parent → learner). No role yet → `/access-pending`. Signed out → `/auth`.
+- `/` sends each signed-in person to their area; with several roles, the most senior one (platform admin → school admin → teacher → parent → learner). No role yet → `/access-pending`. Signed out → the public landing page (`src/components/landing/landing-page.tsx`; contact details are switched on in `src/config/site.ts`).
 - Each area's layout route wraps its pages in `RoleAreaGuard`, which shows a "no access" page to anyone without that role. This is a convenience, not security: the database and, from P2-03, server-side checks are what protect data.
 - Old teacher addresses (`/classes`, `/timetable`, `/resources`, `/homework`) redirect to `/teach/...`.
 

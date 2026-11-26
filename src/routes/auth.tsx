@@ -23,13 +23,17 @@ export const Route = createFileRoute("/auth")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  // `/auth?mode=sign-up` opens the create-account tab (used by the landing page).
+  validateSearch: (search: Record<string, unknown>): { mode?: "sign-up" } =>
+    search["mode"] === "sign-up" ? { mode: "sign-up" } : {},
   component: AuthPage,
 });
 
 type AuthMode = "sign-in" | "sign-up" | "reset";
 
 function AuthPage() {
-  const [mode, setMode] = useState<AuthMode>("sign-in");
+  const search = Route.useSearch();
+  const [mode, setMode] = useState<AuthMode>(search.mode === "sign-up" ? "sign-up" : "sign-in");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -132,7 +136,7 @@ function AuthPage() {
         </Link>
         <Button variant="ghost" size="sm" asChild>
           <Link to="/">
-            <ArrowLeft aria-hidden="true" /> Back to dashboard
+            <ArrowLeft aria-hidden="true" /> Back to home
           </Link>
         </Button>
       </div>
