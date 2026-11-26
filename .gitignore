@@ -16,6 +16,11 @@ dist-ssr
 .nitro
 *.local
 
+# Environment files. Only .env (public values, written by Lovable) and the
+# .env.example template are committed. Secrets belong in Lovable Secrets.
+.env.*
+!.env.example
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars

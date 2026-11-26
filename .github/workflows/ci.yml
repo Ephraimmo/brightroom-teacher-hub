@@ -12,6 +12,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
+      - name: No committed secrets
+        # Bun runs the TypeScript script directly (locally: npm run check:secrets).
+        run: bun scripts/check-secrets.ts
       - name: Typecheck
         run: bun run typecheck
       - name: Lint
