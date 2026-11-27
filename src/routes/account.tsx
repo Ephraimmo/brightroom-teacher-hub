@@ -1,16 +1,12 @@
-import { useEffect, useState, type FormEvent } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Enums } from "@/integrations/supabase/types";
 
 import { useAuth } from "@/components/auth/auth-provider";
+import { ProfileEditor } from "@/components/account/profile-editor";
 import { AppShell } from "@/components/app-shell/app-shell";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { orderedRoles } from "@/domain/navigation";
 import { useUserRoles } from "@/hooks/use-user-roles";
-import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/account")({
   head: () => ({
@@ -39,64 +35,7 @@ const roleLabels: Record<Enums<"app_role">, string> = {
 
 function AccountPage() {
   const { user, isLoading } = useAuth();
-  const queryClient = useQueryClient();
-  const [fullName, setFullName] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [feedback, setFeedback] = useState("");
-  const [saveError, setSaveError] = useState("");
-
-  const profileQuery = useQuery({
-    queryKey: ["profile", user?.id ?? "signed-out"],
-    enabled: Boolean(user),
-    queryFn: async () => {
-      if (!user) throw new Error("Sign in to view your profile.");
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("id, full_name, display_name, preferences")
-        .eq("id", user.id)
-        .maybeSingle();
-      if (error) throw error;
-      if (!data) throw new Error("Your profile is not available yet.");
-      return data;
-    },
-  });
-
   const rolesQuery = useUserRoles();
-
-  const updateProfile = useMutation({
-    mutationFn: async (profile: { full_name: string; display_name: string }) => {
-      if (!user) throw new Error("Sign in to update your profile.");
-      const { data, error } = await supabase
-        .from("profiles")
-        .update(profile)
-        .eq("id", user.id)
-        .select("id, full_name, display_name, preferences")
-        .single();
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: (data) => {
-      if (!user) return;
-      queryClient.setQueryData(["profile", user.id], data);
-      setFeedback("Profile saved.");
-      setSaveError("");
-    },
-    onError: () => {
-      setSaveError("Your profile could not be saved. Please try again.");
-      setFeedback("");
-    },
-  });
-
-  useEffect(() => {
-    if (!profileQuery.data) return;
-    setFullName(profileQuery.data.full_name);
-    setDisplayName(profileQuery.data.display_name ?? "");
-  }, [profileQuery.data]);
-
-  function handleSave(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    updateProfile.mutate({ full_name: fullName.trim(), display_name: displayName.trim() });
-  }
 
   if (isLoading) {
     return (
@@ -142,48 +81,7 @@ function AccountPage() {
               <h2>Profile information</h2>
             </div>
           </div>
-          {profileQuery.isLoading ? <p role="status">Loading your profile…</p> : null}
-          {profileQuery.isError ? (
-            <p className="form-message form-message--error" role="alert">
-              Your profile could not be loaded.
-            </p>
-          ) : null}
-          {profileQuery.data ? (
-            <form className="auth-form" onSubmit={handleSave}>
-              <div className="form-field">
-                <Label htmlFor="profile-full-name">Full name</Label>
-                <Input
-                  id="profile-full-name"
-                  value={fullName}
-                  onChange={(event) => setFullName(event.currentTarget.value)}
-                  maxLength={100}
-                  required
-                />
-              </div>
-              <div className="form-field">
-                <Label htmlFor="profile-display-name">Display name</Label>
-                <Input
-                  id="profile-display-name"
-                  value={displayName}
-                  onChange={(event) => setDisplayName(event.currentTarget.value)}
-                  maxLength={60}
-                />
-              </div>
-              {feedback ? (
-                <p className="form-message form-message--success" role="status">
-                  {feedback}
-                </p>
-              ) : null}
-              {saveError ? (
-                <p className="form-message form-message--error" role="alert">
-                  {saveError}
-                </p>
-              ) : null}
-              <Button type="submit" disabled={updateProfile.isPending}>
-                {updateProfile.isPending ? "Saving…" : "Save changes"}
-              </Button>
-            </form>
-          ) : null}
+          <ProfileEditor userId={user.id} />
         </section>
 
         <section className="workspace-panel account-panel">

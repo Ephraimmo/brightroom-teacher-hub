@@ -2,9 +2,12 @@
 
 Lovable owns the database schema (`drizzle/` and `supabase/migrations/`; see `AGENTS.md`). Each database change is written and tested here first, then applied **through Lovable**.
 
-| File                        | Task  | Status                |
-| --------------------------- | ----- | --------------------- |
-| `P2-03-role-assignment.sql` | P2-03 | Waiting to be applied (screen built: Admin → People) |
+| File                           | Task  | Status                                                      |
+| ------------------------------ | ----- | ----------------------------------------------------------- |
+| `P2-03-role-assignment.sql`    | P2-03 | Waiting to be applied (screen built: Admin → People)        |
+| `P2-04-profile-management.sql` | P2-04 | Waiting to be applied, **after P2-03** (screen: My profile) |
+
+Apply them **in this order**: each file builds on the one before.
 
 ## How a change is tested
 

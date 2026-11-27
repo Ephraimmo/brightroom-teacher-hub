@@ -25,6 +25,31 @@ const SUPABASE_STUBS = `
   GRANT USAGE ON SCHEMA auth TO anon, authenticated, service_role;
   GRANT EXECUTE ON FUNCTION auth.uid() TO anon, authenticated, service_role;
   GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+
+  -- Supabase Storage: just the parts policies and functions refer to.
+  CREATE SCHEMA storage;
+  CREATE TABLE storage.buckets (
+    id text PRIMARY KEY,
+    name text NOT NULL,
+    public boolean DEFAULT false,
+    file_size_limit bigint,
+    allowed_mime_types text[]
+  );
+  CREATE TABLE storage.objects (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    bucket_id text REFERENCES storage.buckets(id),
+    name text NOT NULL,
+    owner uuid,
+    UNIQUE (bucket_id, name)
+  );
+  ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+  CREATE FUNCTION storage.foldername(name text) RETURNS text[] LANGUAGE sql IMMUTABLE AS $$
+    SELECT (string_to_array(name, '/'))[1:array_length(string_to_array(name, '/'), 1) - 1]
+  $$;
+  GRANT USAGE ON SCHEMA storage TO anon, authenticated, service_role;
+  GRANT SELECT ON storage.buckets TO anon, authenticated, service_role;
+  GRANT ALL ON storage.objects TO anon, authenticated, service_role;
+  GRANT EXECUTE ON FUNCTION storage.foldername(text) TO anon, authenticated, service_role;
 `;
 
 const root = process.cwd();

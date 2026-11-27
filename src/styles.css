@@ -2080,3 +2080,83 @@
   outline: 2px solid var(--ring);
   outline-offset: 1px;
 }
+
+/* My profile (P2-04) */
+.profile-photo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-photo-frame {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border-radius: 999px;
+  color: var(--primary);
+  background: var(--secondary);
+}
+
+.profile-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-photo-frame svg {
+  width: 34px;
+  height: 34px;
+}
+
+.profile-photo-actions {
+  display: grid;
+  flex: 1 1 220px;
+  gap: 6px;
+}
+
+.profile-photo-actions .section-heading {
+  margin: 0;
+}
+
+.profile-photo-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.profile-photo-buttons label {
+  cursor: pointer;
+}
+
+.contact-choices {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.contact-choices legend {
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.contact-choices label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.contact-choices input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+}
