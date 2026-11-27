@@ -2507,3 +2507,16 @@
 .period-filter .form-field {
   flex: 0 1 200px;
 }
+
+/* Parents and guardians (P3-04) */
+.parents-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.parents-toolbar .form-field {
+  flex: 1 1 280px;
+}

@@ -34,6 +34,7 @@ import { Route as AuthMfaRouteImport } from './routes/auth_.mfa'
 import { Route as FamilyIndexRouteImport } from './routes/family.index'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
 import { Route as SchoolIndexRouteImport } from './routes/school.index'
+import { Route as SchoolParentsRouteImport } from './routes/school.parents'
 import { Route as SchoolSettingsRouteImport } from './routes/school.settings'
 import { Route as SchoolStaffRouteImport } from './routes/school.staff'
 import { Route as TeachIndexRouteImport } from './routes/teach.index'
@@ -167,6 +168,11 @@ const SchoolIndexRoute = SchoolIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SchoolRoute,
 } as any)
+const SchoolParentsRoute = SchoolParentsRouteImport.update({
+  id: '/parents',
+  path: '/parents',
+  getParentRoute: () => SchoolRoute,
+} as any)
 const SchoolSettingsRoute = SchoolSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -225,6 +231,7 @@ export interface FileRoutesByFullPath {
   '/admin/institutions': typeof AdminInstitutionsRoute
   '/admin/people': typeof AdminPeopleRoute
   '/auth/mfa': typeof AuthMfaRoute
+  '/school/parents': typeof SchoolParentsRoute
   '/school/settings': typeof SchoolSettingsRoute
   '/school/staff': typeof SchoolStaffRoute
   '/teach/classes': typeof TeachClassesRoute
@@ -254,6 +261,7 @@ export interface FileRoutesByTo {
   '/admin/institutions': typeof AdminInstitutionsRoute
   '/admin/people': typeof AdminPeopleRoute
   '/auth/mfa': typeof AuthMfaRoute
+  '/school/parents': typeof SchoolParentsRoute
   '/school/settings': typeof SchoolSettingsRoute
   '/school/staff': typeof SchoolStaffRoute
   '/teach/classes': typeof TeachClassesRoute
@@ -289,6 +297,7 @@ export interface FileRoutesById {
   '/admin/institutions': typeof AdminInstitutionsRoute
   '/admin/people': typeof AdminPeopleRoute
   '/auth_/mfa': typeof AuthMfaRoute
+  '/school/parents': typeof SchoolParentsRoute
   '/school/settings': typeof SchoolSettingsRoute
   '/school/staff': typeof SchoolStaffRoute
   '/teach/classes': typeof TeachClassesRoute
@@ -325,6 +334,7 @@ export interface FileRouteTypes {
     | '/admin/institutions'
     | '/admin/people'
     | '/auth/mfa'
+    | '/school/parents'
     | '/school/settings'
     | '/school/staff'
     | '/teach/classes'
@@ -354,6 +364,7 @@ export interface FileRouteTypes {
     | '/admin/institutions'
     | '/admin/people'
     | '/auth/mfa'
+    | '/school/parents'
     | '/school/settings'
     | '/school/staff'
     | '/teach/classes'
@@ -388,6 +399,7 @@ export interface FileRouteTypes {
     | '/admin/institutions'
     | '/admin/people'
     | '/auth_/mfa'
+    | '/school/parents'
     | '/school/settings'
     | '/school/staff'
     | '/teach/classes'
@@ -599,6 +611,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchoolIndexRouteImport
       parentRoute: typeof SchoolRoute
     }
+    '/school/parents': {
+      id: '/school/parents'
+      path: '/parents'
+      fullPath: '/school/parents'
+      preLoaderRoute: typeof SchoolParentsRouteImport
+      parentRoute: typeof SchoolRoute
+    }
     '/school/settings': {
       id: '/school/settings'
       path: '/settings'
@@ -689,12 +708,14 @@ const LearnRouteChildren: LearnRouteChildren = {
 const LearnRouteWithChildren = LearnRoute._addFileChildren(LearnRouteChildren)
 
 interface SchoolRouteChildren {
+  SchoolParentsRoute: typeof SchoolParentsRoute
   SchoolSettingsRoute: typeof SchoolSettingsRoute
   SchoolStaffRoute: typeof SchoolStaffRoute
   SchoolIndexRoute: typeof SchoolIndexRoute
 }
 
 const SchoolRouteChildren: SchoolRouteChildren = {
+  SchoolParentsRoute: SchoolParentsRoute,
   SchoolSettingsRoute: SchoolSettingsRoute,
   SchoolStaffRoute: SchoolStaffRoute,
   SchoolIndexRoute: SchoolIndexRoute,

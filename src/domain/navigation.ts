@@ -99,6 +99,7 @@ const NAVIGATION: Record<PlatformRole, NavItem[]> = {
   school_admin: [
     { id: "home", label: "Home", to: "/school", icon: "home" },
     { id: "staff", label: "Staff", to: "/school/staff", icon: "people" },
+    { id: "parents", label: "Parents", to: "/school/parents", icon: "classes" },
     { id: "settings", label: "Settings", to: "/school/settings", icon: "settings" },
   ],
   learner: [{ id: "home", label: "Home", to: "/learn", icon: "home" }],

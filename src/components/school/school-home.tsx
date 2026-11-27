@@ -17,6 +17,11 @@ const SECTIONS: { to: string; title: string; text: string }[] = [
     text: "Invite teachers and administrators; edit, suspend or remove them.",
   },
   {
+    to: "/school/parents",
+    title: "Parents and guardians",
+    text: "Parent records, relationships and how to contact them.",
+  },
+  {
     to: "/school/settings",
     title: "Settings",
     text: "School details, academic years and terms, grades and policies.",

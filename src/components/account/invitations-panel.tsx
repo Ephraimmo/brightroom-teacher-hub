@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { MEMBERSHIP_ROLE_LABELS } from "@/domain/schools";
+import { claimGuardianRecord, myGuardianInvitations } from "@/lib/guardians";
 import { acceptInvitation, myInvitations } from "@/lib/schools";
 
 const invitationsKey = (userId: string | undefined) =>
@@ -24,11 +25,19 @@ export function InvitationsPanel() {
     queryFn: myInvitations,
   });
 
+  const parentInvitations = useQuery({
+    queryKey: ["my-guardian-invitations", user?.id ?? "signed-out"],
+    enabled: Boolean(user),
+    queryFn: myGuardianInvitations,
+  });
+
   const accept = useMutation({
-    mutationFn: (id: string) => acceptInvitation(id),
+    mutationFn: ({ id, kind }: { id: string; kind: "staff" | "parent" }) =>
+      kind === "parent" ? claimGuardianRecord(id) : acceptInvitation(id),
     onSuccess: async () => {
       setError(null);
       await queryClient.invalidateQueries({ queryKey: invitationsKey(user?.id) });
+      await queryClient.invalidateQueries({ queryKey: ["my-guardian-invitations"] });
       // The new role opens a new area in the menu.
       await queryClient.invalidateQueries({ queryKey: ["user-roles"] });
       await queryClient.invalidateQueries({ queryKey: ["my-schools"] });
@@ -38,7 +47,8 @@ export function InvitationsPanel() {
   });
 
   const list = invitations.data ?? [];
-  if (list.length === 0) return null;
+  const parentList = parentInvitations.data ?? [];
+  if (list.length === 0 && parentList.length === 0) return null;
 
   return (
     <section className="invitations-panel" aria-label="Invitations">
@@ -54,8 +64,28 @@ export function InvitationsPanel() {
               Open until {new Date(inv.expiresAt).toLocaleDateString("en-ZA")}.
             </span>
           </p>
-          <Button size="sm" disabled={accept.isPending} onClick={() => accept.mutate(inv.id)}>
+          <Button
+            size="sm"
+            disabled={accept.isPending}
+            onClick={() => accept.mutate({ id: inv.id, kind: "staff" })}
+          >
             Accept
+          </Button>
+        </div>
+      ))}
+      {parentList.map((inv) => (
+        <div key={inv.id} className="invitation">
+          <MailOpen aria-hidden="true" />
+          <p>
+            <strong>{inv.institutionName}</strong> has you as a parent or guardian. Confirm it's you
+            to see your children's information.
+          </p>
+          <Button
+            size="sm"
+            disabled={accept.isPending}
+            onClick={() => accept.mutate({ id: inv.id, kind: "parent" })}
+          >
+            Confirm
           </Button>
         </div>
       ))}

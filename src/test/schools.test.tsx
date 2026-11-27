@@ -31,6 +31,11 @@ const service = vi.hoisted(() => ({
   createInvitation: vi.fn(),
 }));
 vi.mock("@/lib/schools", () => service);
+const parents = vi.hoisted(() => ({
+  myGuardianInvitations: vi.fn(),
+  claimGuardianRecord: vi.fn(),
+}));
+vi.mock("@/lib/guardians", () => parents);
 vi.mock("@/components/auth/auth-provider", () => ({
   useAuth: () => ({ user: { id: "admin-1", email: "admin@example.test" }, isLoading: false }),
 }));
@@ -81,6 +86,7 @@ const type = (label: RegExp, value: string) =>
 
 beforeEach(() => {
   vi.clearAllMocks();
+  parents.myGuardianInvitations.mockResolvedValue([]);
 });
 
 describe("school rules", () => {
@@ -209,5 +215,16 @@ describe("Invitations", () => {
     ).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Accept" }));
     await waitFor(() => expect(service.acceptInvitation).toHaveBeenCalledWith("inv1"));
+  });
+
+  it("lets a parent confirm the school's record of them", async () => {
+    service.myInvitations.mockResolvedValue([]);
+    parents.myGuardianInvitations.mockResolvedValue([
+      { id: "g1", institutionName: "Sunrise Primary" },
+    ]);
+    parents.claimGuardianRecord.mockResolvedValue(undefined);
+    withProviders(<InvitationsPanel />, "/account");
+    fireEvent.click(await screen.findByRole("button", { name: "Confirm" }));
+    await waitFor(() => expect(parents.claimGuardianRecord).toHaveBeenCalledWith("g1"));
   });
 });
