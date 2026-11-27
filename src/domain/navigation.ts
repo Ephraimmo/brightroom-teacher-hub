@@ -28,7 +28,8 @@ export type NavIcon =
   | "homework"
   | "people"
   | "audit"
-  | "schools";
+  | "schools"
+  | "settings";
 
 export interface NavItem {
   id: string;
@@ -95,7 +96,10 @@ const NAVIGATION: Record<PlatformRole, NavItem[]> = {
     { id: "people", label: "People", to: "/admin/people", icon: "people" },
     { id: "audit", label: "Audit log", to: "/admin/audit", icon: "audit" },
   ],
-  school_admin: [{ id: "home", label: "Home", to: "/school", icon: "home" }],
+  school_admin: [
+    { id: "home", label: "Home", to: "/school", icon: "home" },
+    { id: "settings", label: "Settings", to: "/school/settings", icon: "settings" },
+  ],
   learner: [{ id: "home", label: "Home", to: "/learn", icon: "home" }],
   parent: [{ id: "home", label: "Home", to: "/family", icon: "home" }],
 };

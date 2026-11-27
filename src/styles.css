@@ -2415,3 +2415,95 @@
   margin: 0;
   font-size: 14px;
 }
+
+/* School settings (P3-02) */
+.settings-sections {
+  display: grid;
+  gap: 4px;
+}
+
+.settings-check,
+.policy-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.settings-check input,
+.policy-choice input {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  accent-color: var(--primary);
+}
+
+.grade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.year-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.year-card {
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.year-card h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.term-list {
+  display: grid;
+  gap: 8px;
+}
+
+.term-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.term-row > strong {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 110px;
+  padding-bottom: 8px;
+  font-size: 14px;
+}
+
+.term-row .form-field {
+  flex: 0 1 170px;
+}
+
+.term-row .form-message {
+  flex-basis: 100%;
+}
+
+.period-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.period-filter .form-field {
+  flex: 0 1 200px;
+}

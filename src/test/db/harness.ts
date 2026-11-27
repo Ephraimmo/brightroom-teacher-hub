@@ -79,6 +79,7 @@ export const PENDING_IN_ORDER = [
   "db/pending/P2-05-account-lifecycle.sql",
   "db/pending/P2-06-mfa.sql",
   "db/pending/P3-01-schools-and-tenancy.sql",
+  "db/pending/P3-02-school-settings.sql",
 ];
 
 /** Every pending file up to and including `file`. */

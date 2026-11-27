@@ -9,6 +9,7 @@ Lovable owns the database schema (`drizzle/` and `supabase/migrations/`; see `AG
 | `P2-05-account-lifecycle.sql`   | P2-05 | Waiting to be applied, **after P2-04** (screens: People status, Audit log, suspended notice)                                                                  |
 | `P2-06-mfa.sql`                 | P2-06 | Waiting to be applied, **after P2-05**. Afterwards platform admins must set up an authenticator app (My profile → Sign-in security) before admin screens work |
 | `P3-01-schools-and-tenancy.sql` | P3-01 | Waiting to be applied, **after P2-06** (screens: Admin → Schools, invitations, school home)                                                                   |
+| `P3-02-school-settings.sql`     | P3-02 | Waiting to be applied, **after P3-01** (screen: School → Settings)                                                                                            |
 
 Apply them **in this order**: each file builds on the one before.
 

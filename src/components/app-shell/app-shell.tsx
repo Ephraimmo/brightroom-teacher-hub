@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   LogOut,
   School,
+  Settings,
   ScrollText,
   UserCog,
   Users,
@@ -40,6 +41,7 @@ const NAV_ICONS: Record<NavIcon, LucideIcon> = {
   people: UserCog,
   audit: ScrollText,
   schools: School,
+  settings: Settings,
 };
 
 export interface AppShellProps {
