@@ -2,12 +2,13 @@
 
 Lovable owns the database schema (`drizzle/` and `supabase/migrations/`; see `AGENTS.md`). Each database change is written and tested here first, then applied **through Lovable**.
 
-| File                           | Task  | Status                                                                                                                                                        |
-| ------------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `P2-03-role-assignment.sql`    | P2-03 | Waiting to be applied (screen built: Admin → People)                                                                                                          |
-| `P2-04-profile-management.sql` | P2-04 | Waiting to be applied, **after P2-03** (screen: My profile)                                                                                                   |
-| `P2-05-account-lifecycle.sql`  | P2-05 | Waiting to be applied, **after P2-04** (screens: People status, Audit log, suspended notice)                                                                  |
-| `P2-06-mfa.sql`                | P2-06 | Waiting to be applied, **after P2-05**. Afterwards platform admins must set up an authenticator app (My profile → Sign-in security) before admin screens work |
+| File                            | Task  | Status                                                                                                                                                        |
+| ------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `P2-03-role-assignment.sql`     | P2-03 | Waiting to be applied (screen built: Admin → People)                                                                                                          |
+| `P2-04-profile-management.sql`  | P2-04 | Waiting to be applied, **after P2-03** (screen: My profile)                                                                                                   |
+| `P2-05-account-lifecycle.sql`   | P2-05 | Waiting to be applied, **after P2-04** (screens: People status, Audit log, suspended notice)                                                                  |
+| `P2-06-mfa.sql`                 | P2-06 | Waiting to be applied, **after P2-05**. Afterwards platform admins must set up an authenticator app (My profile → Sign-in security) before admin screens work |
+| `P3-01-schools-and-tenancy.sql` | P3-01 | Waiting to be applied, **after P2-06** (screens: Admin → Schools, invitations, school home)                                                                   |
 
 Apply them **in this order**: each file builds on the one before.
 

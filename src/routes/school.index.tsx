@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { AreaHome } from "@/components/app-shell/area-home";
+import { SchoolHome } from "@/components/school/school-home";
 
 export const Route = createFileRoute("/school/")({
   head: () => ({ meta: [{ title: "School administration | LearnBridge" }] }),
-  component: () => <AreaHome role="school_admin" />,
+  component: SchoolHome,
 });

@@ -17,6 +17,7 @@ const SUPABASE_STUBS = `
   CREATE TABLE auth.users (
     id uuid PRIMARY KEY,
     email text,
+    email_confirmed_at timestamptz DEFAULT now(),
     raw_user_meta_data jsonb NOT NULL DEFAULT '{}'::jsonb
   );
   CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql STABLE AS $$
@@ -77,6 +78,7 @@ export const PENDING_IN_ORDER = [
   "db/pending/P2-04-profile-management.sql",
   "db/pending/P2-05-account-lifecycle.sql",
   "db/pending/P2-06-mfa.sql",
+  "db/pending/P3-01-schools-and-tenancy.sql",
 ];
 
 /** Every pending file up to and including `file`. */

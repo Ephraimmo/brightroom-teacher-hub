@@ -3,6 +3,7 @@ import type { Enums } from "@/integrations/supabase/types";
 
 import { useAuth } from "@/components/auth/auth-provider";
 import { AccountStatusGate } from "@/components/app-shell/account-status-gate";
+import { InvitationsPanel } from "@/components/account/invitations-panel";
 import { ProfileEditor } from "@/components/account/profile-editor";
 import { AppShell } from "@/components/app-shell/app-shell";
 import { Button } from "@/components/ui/button";
@@ -75,6 +76,7 @@ function AccountPage() {
         title="My profile"
         description="Update your details and review the access assigned to your account."
       >
+        <InvitationsPanel />
         <div className="account-grid">
           <section className="workspace-panel account-panel">
             <div className="section-heading">

@@ -21,6 +21,7 @@ export function StatusPage({
   description,
   actions,
   code,
+  children,
 }: {
   kind: StatusPageKind;
   title: ReactNode;
@@ -28,6 +29,8 @@ export function StatusPage({
   actions?: ReactNode;
   /** Large label above the title, e.g. "404". */
   code?: string;
+  /** Extra content between the description and the actions. */
+  children?: ReactNode;
 }) {
   const Icon = icons[kind];
   const isLoading = kind === "loading";
@@ -45,6 +48,7 @@ export function StatusPage({
         {code ? <p className="status-page-code">{code}</p> : null}
         <h1>{title}</h1>
         {description ? <p className="status-page-description">{description}</p> : null}
+        {children}
         {actions ? <div className="status-page-actions">{actions}</div> : null}
       </div>
     </main>

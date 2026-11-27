@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 
+import { InvitationsPanel } from "@/components/account/invitations-panel";
 import { AccountStatusGate } from "@/components/app-shell/account-status-gate";
 import { useAuth } from "@/components/auth/auth-provider";
 import { StatusPage } from "@/components/design/status-page";
@@ -58,7 +59,9 @@ function AccessPendingPage() {
             </Button>
           </>
         }
-      />
+      >
+        <InvitationsPanel />
+      </StatusPage>
     </AccountStatusGate>
   );
 }

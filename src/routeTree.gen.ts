@@ -28,6 +28,7 @@ import { Route as TimetableRouteImport } from './routes/timetable'
 import { Route as AccountSecurityRouteImport } from './routes/account_.security'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
+import { Route as AdminInstitutionsRouteImport } from './routes/admin.institutions'
 import { Route as AdminPeopleRouteImport } from './routes/admin.people'
 import { Route as AuthMfaRouteImport } from './routes/auth_.mfa'
 import { Route as FamilyIndexRouteImport } from './routes/family.index'
@@ -134,6 +135,11 @@ const AdminAuditRoute = AdminAuditRouteImport.update({
   path: '/audit',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminInstitutionsRoute = AdminInstitutionsRouteImport.update({
+  id: '/institutions',
+  path: '/institutions',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPeopleRoute = AdminPeopleRouteImport.update({
   id: '/people',
   path: '/people',
@@ -204,6 +210,7 @@ export interface FileRoutesByFullPath {
   '/timetable': typeof TimetableRoute
   '/account/security': typeof AccountSecurityRoute
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/institutions': typeof AdminInstitutionsRoute
   '/admin/people': typeof AdminPeopleRoute
   '/auth/mfa': typeof AuthMfaRoute
   '/teach/classes': typeof TeachClassesRoute
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/timetable': typeof TimetableRoute
   '/account/security': typeof AccountSecurityRoute
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/institutions': typeof AdminInstitutionsRoute
   '/admin/people': typeof AdminPeopleRoute
   '/auth/mfa': typeof AuthMfaRoute
   '/teach/classes': typeof TeachClassesRoute
@@ -262,6 +270,7 @@ export interface FileRoutesById {
   '/timetable': typeof TimetableRoute
   '/account_/security': typeof AccountSecurityRoute
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/institutions': typeof AdminInstitutionsRoute
   '/admin/people': typeof AdminPeopleRoute
   '/auth_/mfa': typeof AuthMfaRoute
   '/teach/classes': typeof TeachClassesRoute
@@ -295,6 +304,7 @@ export interface FileRouteTypes {
     | '/timetable'
     | '/account/security'
     | '/admin/audit'
+    | '/admin/institutions'
     | '/admin/people'
     | '/auth/mfa'
     | '/teach/classes'
@@ -321,6 +331,7 @@ export interface FileRouteTypes {
     | '/timetable'
     | '/account/security'
     | '/admin/audit'
+    | '/admin/institutions'
     | '/admin/people'
     | '/auth/mfa'
     | '/teach/classes'
@@ -352,6 +363,7 @@ export interface FileRouteTypes {
     | '/timetable'
     | '/account_/security'
     | '/admin/audit'
+    | '/admin/institutions'
     | '/admin/people'
     | '/auth_/mfa'
     | '/teach/classes'
@@ -521,6 +533,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAuditRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/institutions': {
+      id: '/admin/institutions'
+      path: '/institutions'
+      fullPath: '/admin/institutions'
+      preLoaderRoute: typeof AdminInstitutionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/people': {
       id: '/admin/people'
       path: '/people'
@@ -596,12 +615,14 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAuditRoute: typeof AdminAuditRoute
+  AdminInstitutionsRoute: typeof AdminInstitutionsRoute
   AdminPeopleRoute: typeof AdminPeopleRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditRoute: AdminAuditRoute,
+  AdminInstitutionsRoute: AdminInstitutionsRoute,
   AdminPeopleRoute: AdminPeopleRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
