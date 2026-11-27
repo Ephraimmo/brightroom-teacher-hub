@@ -8,6 +8,7 @@ import {
   Home,
   LayoutDashboard,
   LogOut,
+  UserCog,
   Users,
   type LucideIcon,
 } from "lucide-react";
@@ -34,6 +35,7 @@ const NAV_ICONS: Record<NavIcon, LucideIcon> = {
   timetable: CalendarDays,
   resources: BookOpen,
   homework: ClipboardList,
+  people: UserCog,
 };
 
 export interface AppShellProps {

@@ -1984,3 +1984,99 @@
   outline: 2px solid var(--ring);
   outline-offset: 1px;
 }
+
+/* Admin → People (P2-03) */
+.people-panel {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.people-search,
+.people-add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.people-search .form-field {
+  flex: 1 1 280px;
+}
+
+.people-add .form-field {
+  flex: 0 1 260px;
+}
+
+.person-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.person-summary > svg {
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border-radius: 999px;
+  color: var(--primary);
+  background: var(--secondary);
+}
+
+.person-summary h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.person-summary p,
+.people-note {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+
+.people-subheading {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.people-roles {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.people-roles li,
+.people-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.people-change {
+  display: grid;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.native-select {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--input);
+  border-radius: 6px;
+  color: var(--foreground);
+  background: var(--card);
+  font: inherit;
+  font-size: 14px;
+}
+
+.native-select:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}

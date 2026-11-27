@@ -25,6 +25,7 @@ import { Route as SchoolRouteImport } from './routes/school'
 import { Route as TeachRouteImport } from './routes/teach'
 import { Route as TimetableRouteImport } from './routes/timetable'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminPeopleRouteImport } from './routes/admin.people'
 import { Route as FamilyIndexRouteImport } from './routes/family.index'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
 import { Route as SchoolIndexRouteImport } from './routes/school.index'
@@ -114,6 +115,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPeopleRoute = AdminPeopleRouteImport.update({
+  id: '/people',
+  path: '/people',
+  getParentRoute: () => AdminRoute,
+} as any)
 const FamilyIndexRoute = FamilyIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -171,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/school': typeof SchoolRouteWithChildren
   '/teach': typeof TeachRouteWithChildren
   '/timetable': typeof TimetableRoute
+  '/admin/people': typeof AdminPeopleRoute
   '/teach/classes': typeof TeachClassesRoute
   '/teach/homework': typeof TeachHomeworkRoute
   '/teach/resources': typeof TeachResourcesRoute
@@ -192,6 +199,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/resources': typeof ResourcesRoute
   '/timetable': typeof TimetableRoute
+  '/admin/people': typeof AdminPeopleRoute
   '/teach/classes': typeof TeachClassesRoute
   '/teach/homework': typeof TeachHomeworkRoute
   '/teach/resources': typeof TeachResourcesRoute
@@ -219,6 +227,7 @@ export interface FileRoutesById {
   '/school': typeof SchoolRouteWithChildren
   '/teach': typeof TeachRouteWithChildren
   '/timetable': typeof TimetableRoute
+  '/admin/people': typeof AdminPeopleRoute
   '/teach/classes': typeof TeachClassesRoute
   '/teach/homework': typeof TeachHomeworkRoute
   '/teach/resources': typeof TeachResourcesRoute
@@ -247,6 +256,7 @@ export interface FileRouteTypes {
     | '/school'
     | '/teach'
     | '/timetable'
+    | '/admin/people'
     | '/teach/classes'
     | '/teach/homework'
     | '/teach/resources'
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/resources'
     | '/timetable'
+    | '/admin/people'
     | '/teach/classes'
     | '/teach/homework'
     | '/teach/resources'
@@ -294,6 +305,7 @@ export interface FileRouteTypes {
     | '/school'
     | '/teach'
     | '/timetable'
+    | '/admin/people'
     | '/teach/classes'
     | '/teach/homework'
     | '/teach/resources'
@@ -437,6 +449,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/people': {
+      id: '/admin/people'
+      path: '/people'
+      fullPath: '/admin/people'
+      preLoaderRoute: typeof AdminPeopleRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/family/': {
       id: '/family/'
       path: '/'
@@ -497,10 +516,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminPeopleRoute: typeof AdminPeopleRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminPeopleRoute: AdminPeopleRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 

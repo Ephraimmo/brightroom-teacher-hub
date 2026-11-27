@@ -25,7 +25,8 @@ beforeEach(async () => {
   await seedRole(db, ADMIN, "platform_admin");
   await seedRole(db, TEACHER, "teacher");
   await seedRole(db, PARENT, "parent");
-});
+  // Starting Postgres in memory can take a while when every test file runs at once.
+}, 60_000);
 
 const find = (email: string) =>
   db.query<{ user_id: string; email: string; full_name: string; roles: string }>(

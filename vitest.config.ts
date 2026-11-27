@@ -9,6 +9,9 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    // The default 5s is too tight when all files run at once on a slow machine
+    // (the in-memory Postgres tests are heavy); real failures still fail fast.
+    testTimeout: 30_000,
   },
   resolve: {
     alias: { "@": path.resolve(__dirname, "./src") },

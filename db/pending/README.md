@@ -4,7 +4,7 @@ Lovable owns the database schema (`drizzle/` and `supabase/migrations/`; see `AG
 
 | File                        | Task  | Status                |
 | --------------------------- | ----- | --------------------- |
-| `P2-03-role-assignment.sql` | P2-03 | Waiting to be applied |
+| `P2-03-role-assignment.sql` | P2-03 | Waiting to be applied (screen built: Admin → People) |
 
 ## How a change is tested
 
@@ -20,7 +20,9 @@ Lovable owns the database schema (`drizzle/` and `supabase/migrations/`; see `AG
 
 2. Lovable will ask you to approve the migration. Approve it.
 3. Check that Lovable pushed to GitHub: `drizzle/migrations/` (or `supabase/migrations/`) has the new file, and `src/integrations/supabase/types.ts` mentions `admin_grant_role`.
-4. Tell Claude it's applied. The file is then marked as applied here, and the next step (the screens that use it) can be built.
+4. Tell Claude it's applied. The file is then marked as applied here.
+
+The Admin → People screen is already built. Until the SQL is applied it shows "Role management isn't switched on in the database yet" instead of failing.
 
 ## After P2-03 is applied: make yourself the first platform admin
 

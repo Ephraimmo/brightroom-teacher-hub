@@ -19,7 +19,8 @@ export interface RoleArea {
   workspaceName: string;
 }
 
-export type NavIcon = "home" | "overview" | "classes" | "timetable" | "resources" | "homework";
+export type NavIcon =
+  "home" | "overview" | "classes" | "timetable" | "resources" | "homework" | "people";
 
 export interface NavItem {
   id: string;
@@ -80,7 +81,10 @@ const NAVIGATION: Record<PlatformRole, NavItem[]> = {
   ],
   // The other areas get their pages in P4-01 (admin), P4-02 (school),
   // P4-04 (learner) and P4-05 (parent).
-  platform_admin: [{ id: "home", label: "Home", to: "/admin", icon: "home" }],
+  platform_admin: [
+    { id: "home", label: "Home", to: "/admin", icon: "home" },
+    { id: "people", label: "People", to: "/admin/people", icon: "people" },
+  ],
   school_admin: [{ id: "home", label: "Home", to: "/school", icon: "home" }],
   learner: [{ id: "home", label: "Home", to: "/learn", icon: "home" }],
   parent: [{ id: "home", label: "Home", to: "/family", icon: "home" }],
