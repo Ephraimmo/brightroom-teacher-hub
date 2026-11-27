@@ -2160,3 +2160,73 @@
   height: 16px;
   accent-color: var(--primary);
 }
+
+/* Account status on Admin → People (P2-05) */
+.people-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.people-status .people-subheading {
+  margin-right: 4px;
+}
+
+.people-confirm-panel {
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--muted);
+}
+
+.people-confirm-panel p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Admin → Audit log (P2-05) */
+.audit-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.audit-filters > .form-field {
+  flex: 0 1 220px;
+}
+
+.audit-person {
+  display: flex;
+  flex: 1 1 360px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.audit-person .form-field {
+  flex: 1 1 260px;
+}
+
+.audit-person button {
+  margin-top: 24px;
+}
+
+.audit-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.audit-table-wrap {
+  overflow-x: auto;
+}
+
+.audit-details {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: 13px;
+}

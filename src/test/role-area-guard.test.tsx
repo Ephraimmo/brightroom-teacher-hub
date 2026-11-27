@@ -27,6 +27,15 @@ const roles = vi.hoisted(() => ({
 
 vi.mock("@/components/auth/auth-provider", () => ({ useAuth: () => auth.value }));
 vi.mock("@/hooks/use-user-roles", () => ({ useUserRoles: () => roles.value }));
+const accountStatus = vi.hoisted(() => ({ value: "active" as string }));
+vi.mock("@/hooks/use-account-status", () => ({
+  useAccountStatus: () => ({
+    isLoading: false,
+    isError: false,
+    data: accountStatus.value,
+    refetch: () => {},
+  }),
+}));
 
 /** A tiny app: a teacher area guarded by RoleAreaGuard, plus the pages it can send people to. */
 async function renderTeacherArea() {
@@ -48,6 +57,7 @@ async function renderTeacherArea() {
       page("/auth", "Sign-in page"),
       page("/access-pending", "Waiting page"),
       page("/family", "Family page"),
+      page("/account-suspended", "Suspended notice"),
     ]),
     history: createMemoryHistory({ initialEntries: ["/teach"] }),
   });
@@ -58,6 +68,7 @@ async function renderTeacherArea() {
 beforeEach(() => {
   auth.value = { user: { id: "u1", email: "t@example.com" }, isLoading: false };
   roles.value = { isLoading: false, isError: false, data: [], refetch: () => {} };
+  accountStatus.value = "active";
 });
 
 describe("RoleAreaGuard", () => {
@@ -100,4 +111,15 @@ describe("RoleAreaGuard", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("couldn't check your access");
     expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument();
   });
+
+  it.each(["suspended", "deactivated"])(
+    "sends a %s account to its notice, roles or not",
+    async (status) => {
+      accountStatus.value = status;
+      roles.value.data = [{ role: "teacher" }];
+      await renderTeacherArea();
+      expect(await screen.findByText("Suspended notice")).toBeInTheDocument();
+      expect(screen.queryByText("Teacher content")).not.toBeInTheDocument();
+    },
+  );
 });

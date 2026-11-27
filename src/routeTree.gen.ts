@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccessPendingRouteImport } from './routes/access-pending'
 import { Route as AccountRouteImport } from './routes/account'
+import { Route as AccountSuspendedRouteImport } from './routes/account-suspended'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ClassesRouteImport } from './routes/classes'
@@ -25,6 +26,7 @@ import { Route as SchoolRouteImport } from './routes/school'
 import { Route as TeachRouteImport } from './routes/teach'
 import { Route as TimetableRouteImport } from './routes/timetable'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as AdminPeopleRouteImport } from './routes/admin.people'
 import { Route as FamilyIndexRouteImport } from './routes/family.index'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
@@ -48,6 +50,11 @@ const AccessPendingRoute = AccessPendingRouteImport.update({
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountSuspendedRoute = AccountSuspendedRouteImport.update({
+  id: '/account-suspended',
+  path: '/account-suspended',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -115,6 +122,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPeopleRoute = AdminPeopleRouteImport.update({
   id: '/people',
   path: '/people',
@@ -165,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/access-pending': typeof AccessPendingRoute
   '/account': typeof AccountRoute
+  '/account-suspended': typeof AccountSuspendedRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/classes': typeof ClassesRoute
@@ -177,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/school': typeof SchoolRouteWithChildren
   '/teach': typeof TeachRouteWithChildren
   '/timetable': typeof TimetableRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/admin/people': typeof AdminPeopleRoute
   '/teach/classes': typeof TeachClassesRoute
   '/teach/homework': typeof TeachHomeworkRoute
@@ -192,6 +206,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/access-pending': typeof AccessPendingRoute
   '/account': typeof AccountRoute
+  '/account-suspended': typeof AccountSuspendedRoute
   '/auth': typeof AuthRoute
   '/classes': typeof ClassesRoute
   '/design-system': typeof DesignSystemRoute
@@ -199,6 +214,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/resources': typeof ResourcesRoute
   '/timetable': typeof TimetableRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/admin/people': typeof AdminPeopleRoute
   '/teach/classes': typeof TeachClassesRoute
   '/teach/homework': typeof TeachHomeworkRoute
@@ -215,6 +231,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/access-pending': typeof AccessPendingRoute
   '/account': typeof AccountRoute
+  '/account-suspended': typeof AccountSuspendedRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/classes': typeof ClassesRoute
@@ -227,6 +244,7 @@ export interface FileRoutesById {
   '/school': typeof SchoolRouteWithChildren
   '/teach': typeof TeachRouteWithChildren
   '/timetable': typeof TimetableRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/admin/people': typeof AdminPeopleRoute
   '/teach/classes': typeof TeachClassesRoute
   '/teach/homework': typeof TeachHomeworkRoute
@@ -244,6 +262,7 @@ export interface FileRouteTypes {
     | '/'
     | '/access-pending'
     | '/account'
+    | '/account-suspended'
     | '/admin'
     | '/auth'
     | '/classes'
@@ -256,6 +275,7 @@ export interface FileRouteTypes {
     | '/school'
     | '/teach'
     | '/timetable'
+    | '/admin/audit'
     | '/admin/people'
     | '/teach/classes'
     | '/teach/homework'
@@ -271,6 +291,7 @@ export interface FileRouteTypes {
     | '/'
     | '/access-pending'
     | '/account'
+    | '/account-suspended'
     | '/auth'
     | '/classes'
     | '/design-system'
@@ -278,6 +299,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/resources'
     | '/timetable'
+    | '/admin/audit'
     | '/admin/people'
     | '/teach/classes'
     | '/teach/homework'
@@ -293,6 +315,7 @@ export interface FileRouteTypes {
     | '/'
     | '/access-pending'
     | '/account'
+    | '/account-suspended'
     | '/admin'
     | '/auth'
     | '/classes'
@@ -305,6 +328,7 @@ export interface FileRouteTypes {
     | '/school'
     | '/teach'
     | '/timetable'
+    | '/admin/audit'
     | '/admin/people'
     | '/teach/classes'
     | '/teach/homework'
@@ -321,6 +345,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccessPendingRoute: typeof AccessPendingRoute
   AccountRoute: typeof AccountRoute
+  AccountSuspendedRoute: typeof AccountSuspendedRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   ClassesRoute: typeof ClassesRoute
@@ -356,6 +381,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account-suspended': {
+      id: '/account-suspended'
+      path: '/account-suspended'
+      fullPath: '/account-suspended'
+      preLoaderRoute: typeof AccountSuspendedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -449,6 +481,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/audit': {
+      id: '/admin/audit'
+      path: '/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/people': {
       id: '/admin/people'
       path: '/people'
@@ -516,11 +555,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAuditRoute: typeof AdminAuditRoute
   AdminPeopleRoute: typeof AdminPeopleRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAuditRoute: AdminAuditRoute,
   AdminPeopleRoute: AdminPeopleRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -581,6 +622,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccessPendingRoute: AccessPendingRoute,
   AccountRoute: AccountRoute,
+  AccountSuspendedRoute: AccountSuspendedRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   ClassesRoute: ClassesRoute,

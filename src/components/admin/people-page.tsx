@@ -23,7 +23,21 @@ import {
   roleChangeProblem,
   rolesToOffer,
 } from "@/domain/role-assignment";
-import { findUserByEmail, grantRole, revokeRole, type FoundUser } from "@/lib/admin-people";
+import {
+  ACCOUNT_STATUS_LABELS,
+  ACCOUNT_STATUS_TONES,
+  statusActions,
+  type AccountStatus,
+  type StatusAction,
+} from "@/domain/account-status";
+import {
+  findUserByEmail,
+  getAccountStatus,
+  grantRole,
+  revokeRole,
+  setAccountStatus,
+  type FoundUser,
+} from "@/lib/admin-people";
 
 /**
  * Admin → People: find one account by its exact email and give or remove
@@ -99,7 +113,8 @@ export function PeoplePage() {
   );
 }
 
-type Change = { kind: "grant" | "revoke"; role: PlatformRole };
+type Change =
+  { kind: "grant" | "revoke"; role: PlatformRole } | { kind: "status"; to: AccountStatus };
 
 function PersonCard({ person }: { person: FoundUser }) {
   const { user } = useAuth();
@@ -109,14 +124,41 @@ function PersonCard({ person }: { person: FoundUser }) {
   const offer = rolesToOffer(person.roles);
   const [roleToAdd, setRoleToAdd] = useState<PlatformRole | "">("");
   const [confirmRemove, setConfirmRemove] = useState<PlatformRole | null>(null);
+  const [confirmStatus, setConfirmStatus] = useState<StatusAction | null>(null);
   const [result, setResult] = useState<{ ok: boolean; text: string } | null>(null);
 
   const name = person.fullName || person.email;
+  const isMe = user?.id === person.userId;
+  const status = useQuery({
+    queryKey: ["admin-account-status", person.userId],
+    retry: false,
+    queryFn: () => getAccountStatus(person.userId),
+  });
 
   const change = useMutation({
-    mutationFn: ({ kind, role }: Change) =>
-      (kind === "grant" ? grantRole : revokeRole)({ userId: person.userId, role, reason }),
-    onSuccess: (changed, { kind, role }) => {
+    mutationFn: (next: Change) =>
+      next.kind === "status"
+        ? setAccountStatus(person.userId, next.to, reason)
+        : (next.kind === "grant" ? grantRole : revokeRole)({
+            userId: person.userId,
+            role: next.role,
+            reason,
+          }),
+    onSuccess: (changed, next) => {
+      setReason("");
+      setConfirmStatus(null);
+      if (next.kind === "status") {
+        const label = ACCOUNT_STATUS_LABELS[next.to].toLowerCase();
+        setResult({
+          ok: true,
+          text: changed
+            ? `${name}'s account is now ${label}.`
+            : `${name}'s account is already ${label}.`,
+        });
+        void queryClient.invalidateQueries({ queryKey: ["admin-account-status", person.userId] });
+        return;
+      }
+      const { kind, role } = next;
       const roleName = ROLE_NAMES[role];
       const text = !changed
         ? kind === "grant"
@@ -126,7 +168,6 @@ function PersonCard({ person }: { person: FoundUser }) {
           ? `${name} is now a ${roleName}.`
           : `${name} is no longer a ${roleName}.`;
       setResult({ ok: true, text });
-      setReason("");
       setRoleToAdd("");
       setConfirmRemove(null);
       void queryClient.invalidateQueries({ queryKey: ["admin-find-user"] });
@@ -155,6 +196,67 @@ function PersonCard({ person }: { person: FoundUser }) {
           <p>{person.email}</p>
         </div>
       </div>
+
+      <div className="people-status">
+        <h3 className="people-subheading">Account status</h3>
+        {status.isLoading ? (
+          <span className="people-note">Checking…</span>
+        ) : status.isError ? (
+          <span className="people-note">
+            {ROLE_CHANGE_MESSAGES[roleChangeProblem(status.error)]}
+          </span>
+        ) : status.data ? (
+          <>
+            <StatusPill tone={ACCOUNT_STATUS_TONES[status.data]}>
+              {ACCOUNT_STATUS_LABELS[status.data]}
+            </StatusPill>
+            {isMe ? (
+              <span className="people-note">You can't change your own account's status.</span>
+            ) : (
+              statusActions(status.data).map((action) => (
+                <Button
+                  key={action.to}
+                  size="sm"
+                  variant={action.to === "active" ? "outline" : "ghost"}
+                  onClick={() => {
+                    setResult(null);
+                    setConfirmStatus(action);
+                  }}
+                >
+                  {action.label}
+                </Button>
+              ))
+            )}
+          </>
+        ) : null}
+      </div>
+      {confirmStatus ? (
+        <div
+          className="people-confirm-panel"
+          role="group"
+          aria-label={`${confirmStatus.label} account`}
+        >
+          <p>
+            <strong>
+              {confirmStatus.label} {name}'s account?
+            </strong>{" "}
+            {confirmStatus.explanation} Give the reason below.
+          </p>
+          <span className="people-confirm">
+            <Button
+              size="sm"
+              variant={confirmStatus.to === "active" ? "default" : "destructive"}
+              disabled={change.isPending}
+              onClick={() => submit({ kind: "status", to: confirmStatus.to })}
+            >
+              Confirm: {confirmStatus.label.toLowerCase()}
+            </Button>
+            <Button size="sm" variant="ghost" onClick={() => setConfirmStatus(null)}>
+              Cancel
+            </Button>
+          </span>
+        </div>
+      ) : null}
 
       <h3 className="people-subheading">Current roles</h3>
       {person.roles.length === 0 ? (
@@ -204,7 +306,7 @@ function PersonCard({ person }: { person: FoundUser }) {
         <FormField
           id="people-reason"
           label="Reason for the change"
-          hint="Required for adding or removing a role. Saved in the audit log."
+          hint="Required for any change on this page. Saved in the audit log."
           error={reasonError}
           required
         >

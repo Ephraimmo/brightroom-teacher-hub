@@ -20,7 +20,7 @@ export interface RoleArea {
 }
 
 export type NavIcon =
-  "home" | "overview" | "classes" | "timetable" | "resources" | "homework" | "people";
+  "home" | "overview" | "classes" | "timetable" | "resources" | "homework" | "people" | "audit";
 
 export interface NavItem {
   id: string;
@@ -84,6 +84,7 @@ const NAVIGATION: Record<PlatformRole, NavItem[]> = {
   platform_admin: [
     { id: "home", label: "Home", to: "/admin", icon: "home" },
     { id: "people", label: "People", to: "/admin/people", icon: "people" },
+    { id: "audit", label: "Audit log", to: "/admin/audit", icon: "audit" },
   ],
   school_admin: [{ id: "home", label: "Home", to: "/school", icon: "home" }],
   learner: [{ id: "home", label: "Home", to: "/learn", icon: "home" }],

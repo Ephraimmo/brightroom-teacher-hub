@@ -19,6 +19,8 @@ const service = vi.hoisted(() => ({
   findUserByEmail: vi.fn(),
   grantRole: vi.fn(),
   revokeRole: vi.fn(),
+  getAccountStatus: vi.fn(),
+  setAccountStatus: vi.fn(),
 }));
 vi.mock("@/lib/admin-people", () => service);
 vi.mock("@/components/auth/auth-provider", () => ({
@@ -71,6 +73,7 @@ async function findPerson(email: string) {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  service.getAccountStatus.mockResolvedValue("active");
 });
 
 describe("Admin → People", () => {
@@ -166,7 +169,7 @@ describe("Admin → People", () => {
     user.selectOptions(screen.getByLabelText("Add a role"), "learner");
     user.click(screen.getByRole("button", { name: "Add role" }));
     expect(
-      await screen.findByText("Only platform administrators can change roles."),
+      await screen.findByText("Only platform administrators can do this."),
     ).toBeInTheDocument();
     expect(screen.queryByText(/permission denied/)).not.toBeInTheDocument();
   });
@@ -176,5 +179,50 @@ describe("Admin → People", () => {
     await renderPage();
     await findPerson("tumi@example.test");
     expect(await screen.findByText(/isn't switched on in the database yet/)).toBeInTheDocument();
+  });
+
+  it("shows the account status and suspends after confirmation, with a reason", async () => {
+    service.findUserByEmail.mockResolvedValue(tumi);
+    service.setAccountStatus.mockResolvedValue(true);
+    await renderPage();
+    await findPerson("tumi@example.test");
+    expect(await screen.findByText("Active")).toBeInTheDocument();
+    user.click(screen.getByRole("button", { name: "Suspend" }));
+    expect(
+      screen.getByText(/They can still sign in but will only see a notice/),
+    ).toBeInTheDocument();
+
+    user.click(screen.getByRole("button", { name: "Confirm: suspend" }));
+    expect(await screen.findByText(/saved in the audit log\./)).toBeInTheDocument();
+    expect(service.setAccountStatus).not.toHaveBeenCalled();
+
+    user.type(screen.getByLabelText(/Reason for the change/), "Misuse reported by school");
+    user.click(screen.getByRole("button", { name: "Confirm: suspend" }));
+    expect(await screen.findByText("Tumi Teacher's account is now suspended.")).toBeInTheDocument();
+    expect(service.setAccountStatus).toHaveBeenCalledWith(
+      "user-2",
+      "suspended",
+      "Misuse reported by school",
+    );
+  });
+
+  it("offers reactivation for a suspended account", async () => {
+    service.findUserByEmail.mockResolvedValue(tumi);
+    service.getAccountStatus.mockResolvedValue("suspended");
+    await renderPage();
+    await findPerson("tumi@example.test");
+    expect(await screen.findByText("Suspended")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reactivate" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Suspend" })).not.toBeInTheDocument();
+  });
+
+  it("doesn't let admins change their own account's status", async () => {
+    service.findUserByEmail.mockResolvedValue({ ...tumi, userId: ME });
+    await renderPage();
+    await findPerson("admin@example.test");
+    expect(
+      await screen.findByText("You can't change your own account's status."),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Suspend" })).not.toBeInTheDocument();
   });
 });

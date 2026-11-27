@@ -62,6 +62,7 @@ export function canRemoveRole(actorId: string, targetId: string, role: PlatformR
 
 export type RoleChangeProblem =
   | "own-admin-role"
+  | "own-account"
   | "reason-required"
   | "user-not-found"
   | "not-allowed"
@@ -72,9 +73,11 @@ const PROBLEM_BY_CODE: Record<string, RoleChangeProblem> = {
   LBR01: "own-admin-role",
   LBR02: "reason-required",
   LBR03: "user-not-found",
+  LBR20: "own-account",
   "42501": "not-allowed",
   // PostgREST: the function doesn't exist (the database update isn't applied).
   PGRST202: "setup-missing",
+  PGRST205: "setup-missing",
 };
 
 export function roleChangeProblem(error: unknown): RoleChangeProblem {
@@ -86,10 +89,11 @@ export function roleChangeProblem(error: unknown): RoleChangeProblem {
 export const ROLE_CHANGE_MESSAGES: Record<RoleChangeProblem, string> = {
   "own-admin-role":
     "You can't remove your own platform administrator role. Ask another platform administrator to do it.",
+  "own-account": "You can't change your own account's status. Ask another platform administrator.",
   "reason-required": "Say why you're making this change. It's saved in the audit log.",
   "user-not-found": "That account no longer exists. Search again.",
-  "not-allowed": "Only platform administrators can change roles.",
+  "not-allowed": "Only platform administrators can do this.",
   "setup-missing":
-    "Role management isn't switched on in the database yet. The P2-03 database update needs to be applied in Lovable.",
+    "This isn't switched on in the database yet. The pending database updates (db/pending) need to be applied in Lovable.",
   unknown: "That didn't work. Please try again.",
 };

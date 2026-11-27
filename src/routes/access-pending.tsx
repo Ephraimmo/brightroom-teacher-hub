@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 
+import { AccountStatusGate } from "@/components/app-shell/account-status-gate";
 import { useAuth } from "@/components/auth/auth-provider";
 import { StatusPage } from "@/components/design/status-page";
 import { Button } from "@/components/ui/button";
@@ -28,34 +29,36 @@ function AccessPendingPage() {
   if (roles.length > 0) return <Navigate to={homePathFor(roles)} replace />;
 
   return (
-    <StatusPage
-      kind="pending"
-      title="Your account is waiting for access"
-      description={
-        <>
-          You're signed in as <strong>{user.email ?? "your account"}</strong>. A school or platform
-          administrator needs to give your account a role (teacher, learner, parent, school admin)
-          before you can see school records. You can't assign a role to yourself.
-          {error ? (
-            <span className="mt-3 block text-destructive" role="alert">
-              {error}
-            </span>
-          ) : null}
-        </>
-      }
-      actions={
-        <>
-          <Button variant="outline" onClick={() => void rolesQuery.refetch()}>
-            Check again
-          </Button>
-          <Button variant="outline" asChild>
-            <Link to="/account">View my profile</Link>
-          </Button>
-          <Button variant="ghost" onClick={() => void signOut()}>
-            Sign out
-          </Button>
-        </>
-      }
-    />
+    <AccountStatusGate>
+      <StatusPage
+        kind="pending"
+        title="Your account is waiting for access"
+        description={
+          <>
+            You're signed in as <strong>{user.email ?? "your account"}</strong>. A school or
+            platform administrator needs to give your account a role (teacher, learner, parent,
+            school admin) before you can see school records. You can't assign a role to yourself.
+            {error ? (
+              <span className="mt-3 block text-destructive" role="alert">
+                {error}
+              </span>
+            ) : null}
+          </>
+        }
+        actions={
+          <>
+            <Button variant="outline" onClick={() => void rolesQuery.refetch()}>
+              Check again
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/account">View my profile</Link>
+            </Button>
+            <Button variant="ghost" onClick={() => void signOut()}>
+              Sign out
+            </Button>
+          </>
+        }
+      />
+    </AccountStatusGate>
   );
 }

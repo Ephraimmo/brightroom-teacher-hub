@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import type { Enums } from "@/integrations/supabase/types";
 
 import { useAuth } from "@/components/auth/auth-provider";
+import { AccountStatusGate } from "@/components/app-shell/account-status-gate";
 import { ProfileEditor } from "@/components/account/profile-editor";
 import { AppShell } from "@/components/app-shell/app-shell";
 import { Button } from "@/components/ui/button";
@@ -67,58 +68,60 @@ function AccountPage() {
   const shellRole = orderedRoles(roles.map((r) => r.role))[0] ?? null;
 
   return (
-    <AppShell
-      role={shellRole}
-      eyebrow="MY ACCOUNT"
-      title="My profile"
-      description="Update your details and review the access assigned to your account."
-    >
-      <div className="account-grid">
-        <section className="workspace-panel account-panel">
-          <div className="section-heading">
-            <div>
-              <p className="section-eyebrow">YOUR DETAILS</p>
-              <h2>Profile information</h2>
+    <AccountStatusGate>
+      <AppShell
+        role={shellRole}
+        eyebrow="MY ACCOUNT"
+        title="My profile"
+        description="Update your details and review the access assigned to your account."
+      >
+        <div className="account-grid">
+          <section className="workspace-panel account-panel">
+            <div className="section-heading">
+              <div>
+                <p className="section-eyebrow">YOUR DETAILS</p>
+                <h2>Profile information</h2>
+              </div>
             </div>
-          </div>
-          <ProfileEditor userId={user.id} />
-        </section>
+            <ProfileEditor userId={user.id} />
+          </section>
 
-        <section className="workspace-panel account-panel">
-          <div className="section-heading">
-            <div>
-              <p className="section-eyebrow">ACCOUNT ACCESS</p>
-              <h2>Your role</h2>
+          <section className="workspace-panel account-panel">
+            <div className="section-heading">
+              <div>
+                <p className="section-eyebrow">ACCOUNT ACCESS</p>
+                <h2>Your role</h2>
+              </div>
             </div>
-          </div>
-          {rolesQuery.isLoading ? <p role="status">Checking assigned access…</p> : null}
-          {rolesQuery.isError ? (
-            <p className="form-message form-message--error" role="alert">
-              Assigned access could not be loaded.
-            </p>
-          ) : null}
-          {roles.length > 0 ? (
-            <ul className="role-list">
-              {roles.map(({ role }) => (
-                <li key={role}>{roleLabels[role]}</li>
-              ))}
-            </ul>
-          ) : null}
-          {!rolesQuery.isLoading && !rolesQuery.isError && roles.length === 0 ? (
-            <div className="role-pending">
-              <span className="role-pending-mark" />
-              <strong>Access is not assigned yet</strong>
-              <p>
-                A school or platform administrator must assign your role. New users cannot grant
-                themselves school access.
+            {rolesQuery.isLoading ? <p role="status">Checking assigned access…</p> : null}
+            {rolesQuery.isError ? (
+              <p className="form-message form-message--error" role="alert">
+                Assigned access could not be loaded.
               </p>
-            </div>
-          ) : null}
-          <p className="account-email-note">
-            Signed in as <strong>{user.email ?? "your account"}</strong>
-          </p>
-        </section>
-      </div>
-    </AppShell>
+            ) : null}
+            {roles.length > 0 ? (
+              <ul className="role-list">
+                {roles.map(({ role }) => (
+                  <li key={role}>{roleLabels[role]}</li>
+                ))}
+              </ul>
+            ) : null}
+            {!rolesQuery.isLoading && !rolesQuery.isError && roles.length === 0 ? (
+              <div className="role-pending">
+                <span className="role-pending-mark" />
+                <strong>Access is not assigned yet</strong>
+                <p>
+                  A school or platform administrator must assign your role. New users cannot grant
+                  themselves school access.
+                </p>
+              </div>
+            ) : null}
+            <p className="account-email-note">
+              Signed in as <strong>{user.email ?? "your account"}</strong>
+            </p>
+          </section>
+        </div>
+      </AppShell>
+    </AccountStatusGate>
   );
 }
