@@ -21,6 +21,8 @@ const service = vi.hoisted(() => ({
   revokeRole: vi.fn(),
   getAccountStatus: vi.fn(),
   setAccountStatus: vi.fn(),
+  getMfaFactorCount: vi.fn(),
+  resetMfa: vi.fn(),
 }));
 vi.mock("@/lib/admin-people", () => service);
 vi.mock("@/components/auth/auth-provider", () => ({
@@ -74,6 +76,7 @@ async function findPerson(email: string) {
 beforeEach(() => {
   vi.clearAllMocks();
   service.getAccountStatus.mockResolvedValue("active");
+  service.getMfaFactorCount.mockResolvedValue(0);
 });
 
 describe("Admin → People", () => {
@@ -168,9 +171,7 @@ describe("Admin → People", () => {
     user.type(screen.getByLabelText(/Reason for the change/), "Needs access");
     user.selectOptions(screen.getByLabelText("Add a role"), "learner");
     user.click(screen.getByRole("button", { name: "Add role" }));
-    expect(
-      await screen.findByText("Only platform administrators can do this."),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/Only platform administrators can do this/)).toBeInTheDocument();
     expect(screen.queryByText(/permission denied/)).not.toBeInTheDocument();
   });
 
@@ -224,5 +225,22 @@ describe("Admin → People", () => {
       await screen.findByText("You can't change your own account's status."),
     ).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Suspend" })).not.toBeInTheDocument();
+  });
+
+  it("resets someone's two-step sign-in after confirmation, with a reason", async () => {
+    service.findUserByEmail.mockResolvedValue(tumi);
+    service.getMfaFactorCount.mockResolvedValue(1);
+    service.resetMfa.mockResolvedValue(1);
+    await renderPage();
+    await findPerson("tumi@example.test");
+    expect(await screen.findByText("On (1 app)")).toBeInTheDocument();
+    user.click(screen.getByRole("button", { name: "Reset" }));
+    user.type(
+      screen.getByLabelText(/Reason for the change/),
+      "Lost phone, identity checked by call",
+    );
+    user.click(screen.getByRole("button", { name: "Confirm: reset" }));
+    expect(await screen.findByText(/two-step sign-in was reset/)).toBeInTheDocument();
+    expect(service.resetMfa).toHaveBeenCalledWith("user-2", "Lost phone, identity checked by call");
   });
 });

@@ -2,10 +2,12 @@ import { Link, Navigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
 import { AccountStatusGate } from "@/components/app-shell/account-status-gate";
+import { MfaGate } from "@/components/app-shell/mfa-gate";
 import { useAuth } from "@/components/auth/auth-provider";
 import { StatusPage } from "@/components/design/status-page";
 import { Button } from "@/components/ui/button";
 import { areaAccess, homePathFor, ROLE_AREAS } from "@/domain/navigation";
+import { roleNeedsMfa } from "@/domain/mfa";
 import type { PlatformRole } from "@/domain/permissions";
 import { useUserRoles } from "@/hooks/use-user-roles";
 
@@ -63,5 +65,7 @@ function RoleCheck({ role, children }: { role: PlatformRole; children: ReactNode
     );
   }
 
+  // Admin areas also need two-step sign-in (P2-06).
+  if (roleNeedsMfa(role)) return <MfaGate role={role}>{children}</MfaGate>;
   return <>{children}</>;
 }

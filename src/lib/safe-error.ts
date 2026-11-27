@@ -47,5 +47,9 @@ export function toPublicError(error: unknown): Error {
   };
   const { message, ...rest } = fields[kind];
   if (typeof message === "string") safe.message = message;
+  // LearnBridge's own refusal codes (LBR01, LBR20, ...) say only which rule
+  // stopped the action, so the screen can explain it. Keep them.
+  const code = (error as { code?: unknown } | null)?.code;
+  if (typeof code === "string" && /^LBR\d{2}$/.test(code)) Object.assign(safe, { code });
   return Object.assign(safe, rest);
 }

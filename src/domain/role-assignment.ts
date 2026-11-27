@@ -63,6 +63,7 @@ export function canRemoveRole(actorId: string, targetId: string, role: PlatformR
 export type RoleChangeProblem =
   | "own-admin-role"
   | "own-account"
+  | "own-mfa"
   | "reason-required"
   | "user-not-found"
   | "not-allowed"
@@ -74,6 +75,7 @@ const PROBLEM_BY_CODE: Record<string, RoleChangeProblem> = {
   LBR02: "reason-required",
   LBR03: "user-not-found",
   LBR20: "own-account",
+  LBR21: "own-mfa",
   "42501": "not-allowed",
   // PostgREST: the function doesn't exist (the database update isn't applied).
   PGRST202: "setup-missing",
@@ -81,8 +83,10 @@ const PROBLEM_BY_CODE: Record<string, RoleChangeProblem> = {
 };
 
 export function roleChangeProblem(error: unknown): RoleChangeProblem {
-  const code =
-    error && typeof error === "object" ? String((error as { code?: unknown }).code ?? "") : "";
+  const fields = error && typeof error === "object" ? (error as Record<string, unknown>) : {};
+  const code = String(fields["code"] ?? "");
+  // Server functions send a cleaned error: a refusal arrives as status 403.
+  if (!code && Number(fields["status"]) === 403) return "not-allowed";
   return PROBLEM_BY_CODE[code] ?? "unknown";
 }
 
@@ -90,9 +94,11 @@ export const ROLE_CHANGE_MESSAGES: Record<RoleChangeProblem, string> = {
   "own-admin-role":
     "You can't remove your own platform administrator role. Ask another platform administrator to do it.",
   "own-account": "You can't change your own account's status. Ask another platform administrator.",
+  "own-mfa": "You can't reset your own two-step sign-in. Ask another platform administrator.",
   "reason-required": "Say why you're making this change. It's saved in the audit log.",
   "user-not-found": "That account no longer exists. Search again.",
-  "not-allowed": "Only platform administrators can do this.",
+  "not-allowed":
+    "Only platform administrators can do this, after signing in with their authenticator code.",
   "setup-missing":
     "This isn't switched on in the database yet. The pending database updates (db/pending) need to be applied in Lovable.",
   unknown: "That didn't work. Please try again.",

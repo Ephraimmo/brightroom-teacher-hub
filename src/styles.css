@@ -2230,3 +2230,88 @@
   color: var(--muted-foreground);
   font-size: 13px;
 }
+
+/* Two-step sign-in (P2-06) */
+.mfa-icon {
+  width: 36px;
+  height: 36px;
+  color: var(--primary);
+}
+
+.mfa-help {
+  margin-top: 16px;
+}
+
+.security-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.security-required {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--muted);
+}
+
+.security-required svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--destructive);
+}
+
+.security-required p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.security-factors {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.security-factors li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.security-factors svg {
+  width: 18px;
+  height: 18px;
+  color: var(--primary);
+}
+
+.security-enrol {
+  display: grid;
+  gap: 10px;
+  max-width: 420px;
+}
+
+.security-enrol p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.security-qr {
+  width: 180px;
+  height: 180px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.security-secret {
+  word-break: break-all;
+  font-size: 13px;
+}

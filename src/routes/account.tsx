@@ -116,6 +116,9 @@ function AccountPage() {
                 </p>
               </div>
             ) : null}
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/account/security">Sign-in security</Link>
+            </Button>
             <p className="account-email-note">
               Signed in as <strong>{user.email ?? "your account"}</strong>
             </p>

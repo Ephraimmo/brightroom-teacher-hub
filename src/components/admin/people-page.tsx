@@ -33,7 +33,9 @@ import {
 import {
   findUserByEmail,
   getAccountStatus,
+  getMfaFactorCount,
   grantRole,
+  resetMfa,
   revokeRole,
   setAccountStatus,
   type FoundUser,
@@ -114,7 +116,9 @@ export function PeoplePage() {
 }
 
 type Change =
-  { kind: "grant" | "revoke"; role: PlatformRole } | { kind: "status"; to: AccountStatus };
+  | { kind: "grant" | "revoke"; role: PlatformRole }
+  | { kind: "status"; to: AccountStatus }
+  | { kind: "mfa-reset" };
 
 function PersonCard({ person }: { person: FoundUser }) {
   const { user } = useAuth();
@@ -129,6 +133,12 @@ function PersonCard({ person }: { person: FoundUser }) {
 
   const name = person.fullName || person.email;
   const isMe = user?.id === person.userId;
+  const [confirmMfaReset, setConfirmMfaReset] = useState(false);
+  const mfa = useQuery({
+    queryKey: ["admin-mfa", person.userId],
+    retry: false,
+    queryFn: () => getMfaFactorCount(person.userId),
+  });
   const status = useQuery({
     queryKey: ["admin-account-status", person.userId],
     retry: false,
@@ -136,17 +146,28 @@ function PersonCard({ person }: { person: FoundUser }) {
   });
 
   const change = useMutation({
-    mutationFn: (next: Change) =>
-      next.kind === "status"
-        ? setAccountStatus(person.userId, next.to, reason)
-        : (next.kind === "grant" ? grantRole : revokeRole)({
-            userId: person.userId,
-            role: next.role,
-            reason,
-          }),
+    mutationFn: (next: Change): Promise<boolean | number> =>
+      next.kind === "mfa-reset"
+        ? resetMfa(person.userId, reason)
+        : next.kind === "status"
+          ? setAccountStatus(person.userId, next.to, reason)
+          : (next.kind === "grant" ? grantRole : revokeRole)({
+              userId: person.userId,
+              role: next.role,
+              reason,
+            }),
     onSuccess: (changed, next) => {
       setReason("");
       setConfirmStatus(null);
+      setConfirmMfaReset(false);
+      if (next.kind === "mfa-reset") {
+        setResult({
+          ok: true,
+          text: `${name}'s two-step sign-in was reset. They can sign in with their password and set up a new authenticator.`,
+        });
+        void queryClient.invalidateQueries({ queryKey: ["admin-mfa", person.userId] });
+        return;
+      }
       if (next.kind === "status") {
         const label = ACCOUNT_STATUS_LABELS[next.to].toLowerCase();
         setResult({
@@ -252,6 +273,55 @@ function PersonCard({ person }: { person: FoundUser }) {
               Confirm: {confirmStatus.label.toLowerCase()}
             </Button>
             <Button size="sm" variant="ghost" onClick={() => setConfirmStatus(null)}>
+              Cancel
+            </Button>
+          </span>
+        </div>
+      ) : null}
+
+      <div className="people-status">
+        <h3 className="people-subheading">Two-step sign-in</h3>
+        {mfa.isLoading ? (
+          <span className="people-note">Checking…</span>
+        ) : mfa.isError ? (
+          <span className="people-note">{ROLE_CHANGE_MESSAGES[roleChangeProblem(mfa.error)]}</span>
+        ) : (
+          <>
+            <StatusPill tone={mfa.data ? "success" : "neutral"}>
+              {mfa.data ? `On (${mfa.data} ${mfa.data === 1 ? "app" : "apps"})` : "Off"}
+            </StatusPill>
+            {mfa.data && !isMe ? (
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => {
+                  setResult(null);
+                  setConfirmMfaReset(true);
+                }}
+              >
+                Reset
+              </Button>
+            ) : null}
+          </>
+        )}
+      </div>
+      {confirmMfaReset ? (
+        <div className="people-confirm-panel" role="group" aria-label="Reset two-step sign-in">
+          <p>
+            <strong>Reset {name}'s two-step sign-in?</strong> Only do this after confirming who they
+            are, for example by phone. It removes all their authenticator apps so they can sign in
+            with their password and set up a new one. Give the reason below.
+          </p>
+          <span className="people-confirm">
+            <Button
+              size="sm"
+              variant="destructive"
+              disabled={change.isPending}
+              onClick={() => submit({ kind: "mfa-reset" })}
+            >
+              Confirm: reset
+            </Button>
+            <Button size="sm" variant="ghost" onClick={() => setConfirmMfaReset(false)}>
               Cancel
             </Button>
           </span>

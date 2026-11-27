@@ -25,9 +25,11 @@ import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as SchoolRouteImport } from './routes/school'
 import { Route as TeachRouteImport } from './routes/teach'
 import { Route as TimetableRouteImport } from './routes/timetable'
+import { Route as AccountSecurityRouteImport } from './routes/account_.security'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as AdminPeopleRouteImport } from './routes/admin.people'
+import { Route as AuthMfaRouteImport } from './routes/auth_.mfa'
 import { Route as FamilyIndexRouteImport } from './routes/family.index'
 import { Route as LearnIndexRouteImport } from './routes/learn.index'
 import { Route as SchoolIndexRouteImport } from './routes/school.index'
@@ -117,6 +119,11 @@ const TimetableRoute = TimetableRouteImport.update({
   path: '/timetable',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountSecurityRoute = AccountSecurityRouteImport.update({
+  id: '/account_/security',
+  path: '/account/security',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -131,6 +138,11 @@ const AdminPeopleRoute = AdminPeopleRouteImport.update({
   id: '/people',
   path: '/people',
   getParentRoute: () => AdminRoute,
+} as any)
+const AuthMfaRoute = AuthMfaRouteImport.update({
+  id: '/auth_/mfa',
+  path: '/auth/mfa',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const FamilyIndexRoute = FamilyIndexRouteImport.update({
   id: '/',
@@ -190,8 +202,10 @@ export interface FileRoutesByFullPath {
   '/school': typeof SchoolRouteWithChildren
   '/teach': typeof TeachRouteWithChildren
   '/timetable': typeof TimetableRoute
+  '/account/security': typeof AccountSecurityRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/people': typeof AdminPeopleRoute
+  '/auth/mfa': typeof AuthMfaRoute
   '/teach/classes': typeof TeachClassesRoute
   '/teach/homework': typeof TeachHomeworkRoute
   '/teach/resources': typeof TeachResourcesRoute
@@ -214,8 +228,10 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/resources': typeof ResourcesRoute
   '/timetable': typeof TimetableRoute
+  '/account/security': typeof AccountSecurityRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/people': typeof AdminPeopleRoute
+  '/auth/mfa': typeof AuthMfaRoute
   '/teach/classes': typeof TeachClassesRoute
   '/teach/homework': typeof TeachHomeworkRoute
   '/teach/resources': typeof TeachResourcesRoute
@@ -244,8 +260,10 @@ export interface FileRoutesById {
   '/school': typeof SchoolRouteWithChildren
   '/teach': typeof TeachRouteWithChildren
   '/timetable': typeof TimetableRoute
+  '/account_/security': typeof AccountSecurityRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/people': typeof AdminPeopleRoute
+  '/auth_/mfa': typeof AuthMfaRoute
   '/teach/classes': typeof TeachClassesRoute
   '/teach/homework': typeof TeachHomeworkRoute
   '/teach/resources': typeof TeachResourcesRoute
@@ -275,8 +293,10 @@ export interface FileRouteTypes {
     | '/school'
     | '/teach'
     | '/timetable'
+    | '/account/security'
     | '/admin/audit'
     | '/admin/people'
+    | '/auth/mfa'
     | '/teach/classes'
     | '/teach/homework'
     | '/teach/resources'
@@ -299,8 +319,10 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/resources'
     | '/timetable'
+    | '/account/security'
     | '/admin/audit'
     | '/admin/people'
+    | '/auth/mfa'
     | '/teach/classes'
     | '/teach/homework'
     | '/teach/resources'
@@ -328,8 +350,10 @@ export interface FileRouteTypes {
     | '/school'
     | '/teach'
     | '/timetable'
+    | '/account_/security'
     | '/admin/audit'
     | '/admin/people'
+    | '/auth_/mfa'
     | '/teach/classes'
     | '/teach/homework'
     | '/teach/resources'
@@ -358,6 +382,8 @@ export interface RootRouteChildren {
   SchoolRoute: typeof SchoolRouteWithChildren
   TeachRoute: typeof TeachRouteWithChildren
   TimetableRoute: typeof TimetableRoute
+  AccountSecurityRoute: typeof AccountSecurityRoute
+  AuthMfaRoute: typeof AuthMfaRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -474,6 +500,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TimetableRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account_/security': {
+      id: '/account_/security'
+      path: '/account/security'
+      fullPath: '/account/security'
+      preLoaderRoute: typeof AccountSecurityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -494,6 +527,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/people'
       preLoaderRoute: typeof AdminPeopleRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/auth_/mfa': {
+      id: '/auth_/mfa'
+      path: '/auth/mfa'
+      fullPath: '/auth/mfa'
+      preLoaderRoute: typeof AuthMfaRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/family/': {
       id: '/family/'
@@ -635,6 +675,8 @@ const rootRouteChildren: RootRouteChildren = {
   SchoolRoute: SchoolRouteWithChildren,
   TeachRoute: TeachRouteWithChildren,
   TimetableRoute: TimetableRoute,
+  AccountSecurityRoute: AccountSecurityRoute,
+  AuthMfaRoute: AuthMfaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

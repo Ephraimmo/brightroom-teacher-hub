@@ -111,3 +111,20 @@ export async function setAccountStatus(
   if (error) throw error;
   return data === true;
 }
+
+// ---------------------------------------------------------------------------
+// Two-step sign-in (P2-06, db/pending/P2-06-mfa.sql)
+
+/** How many authenticator apps this person has set up. */
+export async function getMfaFactorCount(userId: string): Promise<number> {
+  const { data, error } = await untyped.rpc("admin_mfa_factor_count", { p_user_id: userId });
+  if (error) throw error;
+  return typeof data === "number" ? data : 0;
+}
+
+/** Remove all their authenticator apps (they lost their phone). Returns how many. */
+export async function resetMfa(userId: string, reason: string): Promise<number> {
+  const { resetUserMfa } = await import("@/lib/mfa-admin.functions");
+  const result = await resetUserMfa({ data: { userId, reason } });
+  return result.removed;
+}

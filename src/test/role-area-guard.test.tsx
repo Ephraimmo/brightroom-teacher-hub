@@ -27,6 +27,14 @@ const roles = vi.hoisted(() => ({
 
 vi.mock("@/components/auth/auth-provider", () => ({ useAuth: () => auth.value }));
 vi.mock("@/hooks/use-user-roles", () => ({ useUserRoles: () => roles.value }));
+vi.mock("@/hooks/use-mfa", () => ({
+  useMfa: () => ({
+    isLoading: false,
+    isError: false,
+    data: { currentLevel: "aal1", nextLevel: "aal1", verifiedFactors: 0, factors: [] },
+    refetch: () => {},
+  }),
+}));
 const accountStatus = vi.hoisted(() => ({ value: "active" as string }));
 vi.mock("@/hooks/use-account-status", () => ({
   useAccountStatus: () => ({
