@@ -12,6 +12,11 @@ import { usePeriodFilter } from "./use-period-filter";
 /** The links on the school home page, one per school-admin page that exists. */
 const SECTIONS: { to: string; title: string; text: string }[] = [
   {
+    to: "/school/staff",
+    title: "Staff",
+    text: "Invite teachers and administrators; edit, suspend or remove them.",
+  },
+  {
     to: "/school/settings",
     title: "Settings",
     text: "School details, academic years and terms, grades and policies.",
