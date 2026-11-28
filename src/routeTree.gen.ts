@@ -16,6 +16,7 @@ import { Route as AccountSuspendedRouteImport } from './routes/account-suspended
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ClassesRouteImport } from './routes/classes'
+import { Route as DemoRouteImport } from './routes/demo'
 import { Route as DesignSystemRouteImport } from './routes/design-system'
 import { Route as FamilyRouteImport } from './routes/family'
 import { Route as HomeworkRouteImport } from './routes/homework'
@@ -76,6 +77,11 @@ const AuthRoute = AuthRouteImport.update({
 const ClassesRoute = ClassesRouteImport.update({
   id: '/classes',
   path: '/classes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoRoute = DemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DesignSystemRoute = DesignSystemRouteImport.update({
@@ -217,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/classes': typeof ClassesRoute
+  '/demo': typeof DemoRoute
   '/design-system': typeof DesignSystemRoute
   '/family': typeof FamilyRouteWithChildren
   '/homework': typeof HomeworkRoute
@@ -251,6 +258,7 @@ export interface FileRoutesByTo {
   '/account-suspended': typeof AccountSuspendedRoute
   '/auth': typeof AuthRoute
   '/classes': typeof ClassesRoute
+  '/demo': typeof DemoRoute
   '/design-system': typeof DesignSystemRoute
   '/homework': typeof HomeworkRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -283,6 +291,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/classes': typeof ClassesRoute
+  '/demo': typeof DemoRoute
   '/design-system': typeof DesignSystemRoute
   '/family': typeof FamilyRouteWithChildren
   '/homework': typeof HomeworkRoute
@@ -320,6 +329,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/classes'
+    | '/demo'
     | '/design-system'
     | '/family'
     | '/homework'
@@ -354,6 +364,7 @@ export interface FileRouteTypes {
     | '/account-suspended'
     | '/auth'
     | '/classes'
+    | '/demo'
     | '/design-system'
     | '/homework'
     | '/reset-password'
@@ -385,6 +396,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/classes'
+    | '/demo'
     | '/design-system'
     | '/family'
     | '/homework'
@@ -421,6 +433,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   ClassesRoute: typeof ClassesRoute
+  DemoRoute: typeof DemoRoute
   DesignSystemRoute: typeof DesignSystemRoute
   FamilyRoute: typeof FamilyRouteWithChildren
   HomeworkRoute: typeof HomeworkRoute
@@ -483,6 +496,13 @@ declare module '@tanstack/react-router' {
       path: '/classes'
       fullPath: '/classes'
       preLoaderRoute: typeof ClassesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/design-system': {
@@ -750,6 +770,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   ClassesRoute: ClassesRoute,
+  DemoRoute: DemoRoute,
   DesignSystemRoute: DesignSystemRoute,
   FamilyRoute: FamilyRouteWithChildren,
   HomeworkRoute: HomeworkRoute,

@@ -6,6 +6,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { MembershipRole } from "@/domain/schools";
 import type { StaffStatus } from "@/domain/staff";
+import * as demo from "@/demo/demo-store";
+import { isDemo } from "@/demo/demo-session";
 import { supabase } from "@/integrations/supabase/client";
 
 // Not in the generated types until Lovable applies the SQL.
@@ -24,6 +26,7 @@ export interface StaffMember {
 }
 
 export async function listStaff(institutionId: string): Promise<StaffMember[]> {
+  if (isDemo()) return demo.listStaff(institutionId);
   const { data, error } = await db.rpc("school_staff", { p_institution_id: institutionId });
   if (error) throw error;
   return ((data as Record<string, unknown>[] | null) ?? []).map((r) => ({
@@ -47,6 +50,7 @@ export interface OpenInvitation {
 }
 
 export async function listOpenInvitations(institutionId: string): Promise<OpenInvitation[]> {
+  if (isDemo()) return demo.listOpenInvitations(institutionId);
   const { data, error } = await db.rpc("school_open_invitations", {
     p_institution_id: institutionId,
   });
@@ -61,6 +65,7 @@ export async function listOpenInvitations(institutionId: string): Promise<OpenIn
 }
 
 export async function revokeInvitation(id: string): Promise<boolean> {
+  if (isDemo()) return demo.revokeInvitation(id);
   const { data, error } = await db.rpc("revoke_invitation", { p_invitation_id: id });
   if (error) throw error;
   return data === true;
@@ -71,6 +76,7 @@ export async function updateStaffMember(
   title: string,
   grades: string[],
 ): Promise<void> {
+  if (isDemo()) return demo.updateStaffMember(membershipId, title, grades);
   const { error } = await db.rpc("update_staff_member", {
     p_membership_id: membershipId,
     p_title: title.trim() || null,
@@ -84,6 +90,7 @@ export async function setStaffStatus(
   status: "active" | "suspended" | "removed",
   reason: string,
 ): Promise<boolean> {
+  if (isDemo()) return demo.setStaffStatus(membershipId, status, reason);
   const { data, error } = await db.rpc("set_staff_status", {
     p_membership_id: membershipId,
     p_status: status,

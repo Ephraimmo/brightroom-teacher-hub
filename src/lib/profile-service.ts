@@ -10,6 +10,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import { isLanguageCode, normalizeSaMobile, type ProfileForm } from "@/domain/profile";
+import * as demo from "@/demo/demo-store";
+import { isDemo } from "@/demo/demo-session";
 import { supabase } from "@/integrations/supabase/client";
 
 // The generated types don't know the new columns and functions until Lovable
@@ -60,6 +62,7 @@ function toProfile(row: ProfileRow, extended: boolean): MyProfile {
 }
 
 export async function loadMyProfile(userId: string): Promise<MyProfile> {
+  if (isDemo()) return demo.loadMyProfile();
   const full = await db.from("profiles").select(FULL_COLUMNS).eq("id", userId).maybeSingle();
   if (!full.error) {
     if (!full.data) throw new Error("Your profile is not available yet.");
@@ -79,6 +82,7 @@ export async function saveMyProfile(
   form: ProfileForm,
   extended: boolean,
 ): Promise<boolean> {
+  if (isDemo()) return demo.saveMyProfile(form);
   if (!extended) {
     const { error } = await db
       .from("profiles")
@@ -115,6 +119,7 @@ export async function replaceMyAvatar(
   file: File,
   oldPath: string | null,
 ): Promise<string> {
+  if (isDemo()) return demo.replaceMyAvatar(file);
   const path = `${userId}/${Date.now()}.${EXTENSIONS[file.type] ?? "img"}`;
   const bucket = db.storage.from(AVATAR_BUCKET);
 
@@ -131,6 +136,7 @@ export async function replaceMyAvatar(
 }
 
 export async function removeMyAvatar(oldPath: string): Promise<void> {
+  if (isDemo()) return demo.removeMyAvatar();
   const { error } = await db.rpc("set_my_avatar", { p_path: null });
   if (error) throw error;
   await db.storage.from(AVATAR_BUCKET).remove([oldPath]);
@@ -138,6 +144,7 @@ export async function removeMyAvatar(oldPath: string): Promise<void> {
 
 /** A link to your photo that stops working after an hour (the bucket is private). */
 export async function avatarLink(path: string): Promise<string> {
+  if (isDemo()) return demo.avatarLink(path);
   const { data, error } = await db.storage.from(AVATAR_BUCKET).createSignedUrl(path, 60 * 60);
   if (error) throw error;
   return data.signedUrl;

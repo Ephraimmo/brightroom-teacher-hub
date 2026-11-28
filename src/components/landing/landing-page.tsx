@@ -199,6 +199,13 @@ export function LandingPage({ contact = CONTACT }: { contact?: SiteContact | nul
                 >
                   Sign in
                 </Link>
+                {" · "}
+                <Link
+                  to="/demo"
+                  className="font-semibold text-sidebar-primary underline-offset-4 hover:underline"
+                >
+                  Explore the demo
+                </Link>
               </p>
             </div>
             <ul className="grid gap-3 sm:grid-cols-2" aria-label="Who LearnBridge is for">

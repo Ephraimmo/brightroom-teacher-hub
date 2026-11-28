@@ -5,6 +5,7 @@ import { type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { ErrorScreen, NotFoundScreen } from "@/components/app-shell/error-screens";
 import { AuthProvider } from "@/components/auth/auth-provider";
+import { DemoBanner } from "@/demo/demo-banner";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
@@ -68,6 +69,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <DemoBanner />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
       </AuthProvider>

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cleanTotpCode, MAX_FACTORS, mfaErrorMessage } from "@/domain/mfa";
 import { mfaKey, useMfa } from "@/hooks/use-mfa";
+import { isDemo } from "@/demo/demo-session";
 import { supabase } from "@/integrations/supabase/client";
 
 interface Enrolment {
@@ -41,7 +42,14 @@ export function SecurityPanel({ required }: { required: boolean }) {
   }
   const { factors, currentLevel } = mfa.data;
 
+  const DEMO_NOTE =
+    "In the demo, authenticator apps can't be added or removed. Demo accounts count as already verified.";
+
   async function start() {
+    if (isDemo()) {
+      setMessage(DEMO_NOTE);
+      return;
+    }
     setBusy(true);
     setError(null);
     setMessage(null);
@@ -96,6 +104,11 @@ export function SecurityPanel({ required }: { required: boolean }) {
   }
 
   async function remove(factorId: string) {
+    if (isDemo()) {
+      setConfirmRemove(null);
+      setMessage(DEMO_NOTE);
+      return;
+    }
     setBusy(true);
     setError(null);
     const { error: removeError } = await supabase.auth.mfa.unenroll({ factorId });

@@ -8,6 +8,8 @@ import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import { isAccountStatus, type AccountStatus } from "@/domain/account-status";
 import type { PlatformRole } from "@/domain/permissions";
 import { normalizeEmail } from "@/domain/role-assignment";
+import * as demo from "@/demo/demo-store";
+import { isDemo } from "@/demo/demo-session";
 import { supabase } from "@/integrations/supabase/client";
 
 export interface FoundUser {
@@ -36,6 +38,7 @@ interface FoundUserRow {
 
 /** The one account with exactly this email, or null. */
 export async function findUserByEmail(email: string): Promise<FoundUser | null> {
+  if (isDemo()) return demo.findUserByEmail(email);
   const { data, error } = await rpc<FoundUserRow[]>("admin_find_user", {
     p_email: normalizeEmail(email),
   });
@@ -58,6 +61,7 @@ export interface RoleChange {
 
 /** True if the role was added, false if they already had it. */
 export async function grantRole({ userId, role, reason }: RoleChange): Promise<boolean> {
+  if (isDemo()) return demo.grantRole({ userId, role, reason });
   const { data, error } = await rpc<boolean>("admin_grant_role", {
     p_user_id: userId,
     p_role: role,
@@ -69,6 +73,7 @@ export async function grantRole({ userId, role, reason }: RoleChange): Promise<b
 
 /** True if the role was removed, false if they didn't have it. */
 export async function revokeRole({ userId, role, reason }: RoleChange): Promise<boolean> {
+  if (isDemo()) return demo.revokeRole({ userId, role, reason });
   const { data, error } = await rpc<boolean>("admin_revoke_role", {
     p_user_id: userId,
     p_role: role,
@@ -87,6 +92,7 @@ const untyped = supabase as unknown as SupabaseClient;
 
 /** A person's account status, as a platform admin sees it. No row means active. */
 export async function getAccountStatus(userId: string): Promise<AccountStatus> {
+  if (isDemo()) return demo.getAccountStatus(userId);
   const { data, error } = await untyped
     .from("account_states")
     .select("status")
@@ -103,6 +109,7 @@ export async function setAccountStatus(
   status: AccountStatus,
   reason: string,
 ): Promise<boolean> {
+  if (isDemo()) return demo.setAccountStatus(userId, status, reason);
   const { data, error } = await untyped.rpc("admin_set_account_status", {
     p_user_id: userId,
     p_status: status,
@@ -117,6 +124,7 @@ export async function setAccountStatus(
 
 /** How many authenticator apps this person has set up. */
 export async function getMfaFactorCount(userId: string): Promise<number> {
+  if (isDemo()) return demo.getMfaFactorCount(userId);
   const { data, error } = await untyped.rpc("admin_mfa_factor_count", { p_user_id: userId });
   if (error) throw error;
   return typeof data === "number" ? data : 0;
@@ -124,6 +132,7 @@ export async function getMfaFactorCount(userId: string): Promise<number> {
 
 /** Remove all their authenticator apps (they lost their phone). Returns how many. */
 export async function resetMfa(userId: string, reason: string): Promise<number> {
+  if (isDemo()) return demo.resetMfa(userId, reason);
   const { resetUserMfa } = await import("@/lib/mfa-admin.functions");
   const result = await resetUserMfa({ data: { userId, reason } });
   return result.removed;

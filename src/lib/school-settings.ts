@@ -13,6 +13,8 @@ import {
   type YearForm,
 } from "@/domain/school-settings";
 import { normalizeSaPhone, type InstitutionType } from "@/domain/schools";
+import * as demo from "@/demo/demo-store";
+import { isDemo } from "@/demo/demo-session";
 import { supabase } from "@/integrations/supabase/client";
 
 // Not in the generated types until Lovable applies the SQL.
@@ -34,6 +36,7 @@ export interface SchoolSettings {
 }
 
 export async function getSchoolSettings(institutionId: string): Promise<SchoolSettings> {
+  if (isDemo()) return demo.getSchoolSettings(institutionId);
   const { data, error } = await db.rpc("institution_settings", { p_institution_id: institutionId });
   if (error) throw error;
   const row = (data as Record<string, unknown>[] | null)?.[0];
@@ -67,6 +70,7 @@ export async function updateSchoolDetails(
   institutionId: string,
   form: SchoolDetailsForm,
 ): Promise<boolean> {
+  if (isDemo()) return demo.updateSchoolDetails(institutionId, form);
   const phone = form.contactPhone.trim();
   const { data, error } = await db.rpc("update_institution_profile", {
     p_institution_id: institutionId,
@@ -83,6 +87,7 @@ export async function updateSchoolDetails(
 }
 
 export async function updatePolicies(institutionId: string, policies: Policies): Promise<void> {
+  if (isDemo()) return demo.updatePolicies(institutionId, policies);
   const { error } = await db.rpc("update_institution_policies", {
     p_institution_id: institutionId,
     p_policies: policies,
@@ -97,6 +102,7 @@ export interface GradeLevel {
 }
 
 export async function listGradeLevels(): Promise<GradeLevel[]> {
+  if (isDemo()) return demo.listGradeLevels();
   const { data, error } = await db
     .from("grade_levels")
     .select("code, label, phase")
@@ -106,6 +112,7 @@ export async function listGradeLevels(): Promise<GradeLevel[]> {
 }
 
 export async function setGrades(institutionId: string, codes: string[]): Promise<void> {
+  if (isDemo()) return demo.setGrades(institutionId, codes);
   const { error } = await db.rpc("set_institution_grades", {
     p_institution_id: institutionId,
     p_codes: codes,
@@ -114,6 +121,7 @@ export async function setGrades(institutionId: string, codes: string[]): Promise
 }
 
 export async function getAcademicPeriods(institutionId: string): Promise<AcademicYear[]> {
+  if (isDemo()) return demo.getAcademicPeriods(institutionId);
   const { data, error } = await db.rpc("academic_periods", { p_institution_id: institutionId });
   if (error) throw error;
   return groupPeriods((data as PeriodRow[] | null) ?? []);
@@ -124,6 +132,7 @@ export async function saveAcademicYear(
   yearId: string | null,
   form: YearForm,
 ): Promise<string> {
+  if (isDemo()) return demo.saveAcademicYear(institutionId, yearId, form);
   const { data, error } = await db.rpc("save_academic_year", {
     p_institution_id: institutionId,
     p_year_id: yearId,
@@ -137,6 +146,7 @@ export async function saveAcademicYear(
 }
 
 export async function saveTerm(yearId: string, form: TermForm): Promise<string> {
+  if (isDemo()) return demo.saveTerm(yearId, form);
   const { data, error } = await db.rpc("save_term", {
     p_academic_year_id: yearId,
     p_number: form.number,

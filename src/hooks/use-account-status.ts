@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useAuth } from "@/components/auth/auth-provider";
 import { isAccountStatus, type AccountStatus } from "@/domain/account-status";
+import { isDemo } from "@/demo/demo-session";
+import { myAccountStatus } from "@/demo/demo-store";
 import { supabase } from "@/integrations/supabase/client";
 
 // account_states isn't in the generated types until Lovable applies the P2-05 SQL.
@@ -23,6 +25,7 @@ export function useAccountStatus() {
     enabled: Boolean(user),
     queryFn: async (): Promise<AccountStatus> => {
       if (!user) throw new Error("Sign in first.");
+      if (isDemo()) return myAccountStatus();
       const { data, error } = await db
         .from("account_states")
         .select("status")

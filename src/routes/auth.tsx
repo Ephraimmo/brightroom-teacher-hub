@@ -315,6 +315,12 @@ function AuthPage() {
               Back to sign in
             </Button>
           ) : null}
+          {!isReset ? (
+            <p className="auth-demo-link">
+              Just looking? <Link to="/demo">Explore the demo</Link> with sample schools and people.
+              No account needed.
+            </p>
+          ) : null}
           {isSignUp ? (
             <p className="auth-footnote">
               After confirming your email, a school or platform administrator assigns the

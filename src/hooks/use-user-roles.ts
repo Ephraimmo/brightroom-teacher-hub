@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useAuth } from "@/components/auth/auth-provider";
 import type { PlatformRole } from "@/domain/permissions";
+import { isDemo } from "@/demo/demo-session";
+import { myRoles as demoRoles } from "@/demo/demo-store";
 import { supabase } from "@/integrations/supabase/client";
 
 const KNOWN: readonly PlatformRole[] = [
@@ -30,6 +32,10 @@ export function useUserRoles() {
     enabled: Boolean(user),
     queryFn: async (): Promise<{ role: PlatformRole }[]> => {
       if (!user) throw new Error("Sign in to view account access.");
+      if (isDemo()) {
+        const values = await demoRoles();
+        return KNOWN.filter((r) => values.includes(r)).map((role) => ({ role }));
+      }
       const combined = await db.rpc("my_roles");
       if (!combined.error) {
         const values = ((combined.data as unknown[] | null) ?? []).map(String);

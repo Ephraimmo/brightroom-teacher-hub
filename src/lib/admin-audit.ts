@@ -5,6 +5,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { AuditEntry } from "@/domain/audit";
+import * as demo from "@/demo/demo-store";
+import { isDemo } from "@/demo/demo-session";
 import { supabase } from "@/integrations/supabase/client";
 
 // Not in the generated types until Lovable applies the SQL.
@@ -41,6 +43,7 @@ export async function loadAuditPage({
   userId,
   beforeId,
 }: AuditQuery): Promise<AuditEntry[]> {
+  if (isDemo()) return demo.loadAuditPage({ group, userId, beforeId });
   const { data, error } = await db.rpc("admin_audit_log", {
     p_action_prefix: group || null,
     p_user_id: userId,

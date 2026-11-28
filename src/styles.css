@@ -2520,3 +2520,163 @@
 .parents-toolbar .form-field {
   flex: 1 1 280px;
 }
+
+/* ------------------------------------------------------------------------ */
+/* Demo mode (src/demo, docs/demo.md)                                        */
+
+.demo-banner {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--accent);
+  color: var(--accent-foreground);
+  font-size: 13px;
+}
+.demo-banner > svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+.demo-banner p {
+  flex: 1 1 260px;
+  margin: 0;
+}
+.demo-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.auth-demo-link {
+  margin: 16px 0 0;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  text-align: center;
+}
+.auth-demo-link a {
+  color: var(--primary);
+  font-weight: 600;
+  text-underline-offset: 4px;
+}
+.auth-demo-link a:hover {
+  text-decoration: underline;
+}
+
+.demo-intro {
+  max-width: 720px;
+  margin: 48px auto 24px;
+}
+.demo-intro h1 {
+  font-size: 34px;
+}
+.demo-intro > p:not(.page-eyebrow) {
+  margin: 12px 0 0;
+  color: var(--muted-foreground);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.demo-roles {
+  display: grid;
+  max-width: 720px;
+  gap: 10px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+.demo-role {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--foreground);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.demo-role:hover:not(:disabled),
+.demo-role:focus-visible {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 18%, transparent);
+  outline: none;
+}
+.demo-role[aria-disabled="true"] {
+  cursor: progress;
+  opacity: 0.7;
+  pointer-events: none;
+}
+.demo-role.is-active {
+  border-color: var(--primary);
+}
+.demo-role > svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  color: var(--muted-foreground);
+}
+.demo-role-icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--muted);
+  color: var(--primary);
+}
+.demo-role-icon svg {
+  width: 20px;
+  height: 20px;
+}
+.demo-role-copy {
+  display: grid;
+  flex: 1;
+  gap: 3px;
+}
+.demo-role-copy strong {
+  font-size: 15px;
+}
+.demo-role-copy span {
+  color: var(--muted-foreground);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.demo-role-copy em {
+  color: var(--primary);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.demo-footer {
+  display: flex;
+  max-width: 720px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 20px auto 0;
+}
+.demo-footer .form-message {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .demo-intro {
+    margin-top: 28px;
+  }
+  .demo-intro h1 {
+    font-size: 26px;
+  }
+}

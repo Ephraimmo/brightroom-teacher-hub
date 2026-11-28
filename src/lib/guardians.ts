@@ -6,6 +6,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { GuardianForm, Relationship } from "@/domain/guardians";
 import { normalizeSaMobile, type LanguageCode } from "@/domain/profile";
+import * as demo from "@/demo/demo-store";
+import { isDemo } from "@/demo/demo-session";
 import { supabase } from "@/integrations/supabase/client";
 
 // Not in the generated types until Lovable applies the SQL.
@@ -28,6 +30,7 @@ export interface Guardian {
 }
 
 export async function listGuardians(institutionId: string): Promise<Guardian[]> {
+  if (isDemo()) return demo.listGuardians(institutionId);
   const { data, error } = await db.rpc("school_guardians", { p_institution_id: institutionId });
   if (error) throw error;
   return ((data as Record<string, unknown>[] | null) ?? []).map((r) => ({
@@ -63,6 +66,7 @@ function detailArgs(form: GuardianForm) {
 }
 
 export async function addGuardian(institutionId: string, form: GuardianForm): Promise<string> {
+  if (isDemo()) return demo.addGuardian(institutionId, form);
   const { data, error } = await db.rpc("add_guardian", {
     p_institution_id: institutionId,
     ...detailArgs(form),
@@ -72,6 +76,7 @@ export async function addGuardian(institutionId: string, form: GuardianForm): Pr
 }
 
 export async function updateGuardian(id: string, form: GuardianForm): Promise<boolean> {
+  if (isDemo()) return demo.updateGuardian(id, form);
   const { data, error } = await db.rpc("update_guardian", {
     p_guardian_id: id,
     ...detailArgs(form),
@@ -85,6 +90,7 @@ export async function setGuardianStatus(
   status: "active" | "archived",
   reason: string,
 ): Promise<boolean> {
+  if (isDemo()) return demo.setGuardianStatus(id, status, reason);
   const { data, error } = await db.rpc("set_guardian_status", {
     p_guardian_id: id,
     p_status: status,
@@ -101,6 +107,7 @@ export interface GuardianInvitation {
 
 /** Parent records waiting for this person to claim. Empty before the SQL is applied. */
 export async function myGuardianInvitations(): Promise<GuardianInvitation[]> {
+  if (isDemo()) return demo.myGuardianInvitations();
   const { data, error } = await db.rpc("my_guardian_invitations");
   if (error) {
     if (error.code === "PGRST202") return [];
@@ -113,6 +120,7 @@ export async function myGuardianInvitations(): Promise<GuardianInvitation[]> {
 }
 
 export async function claimGuardianRecord(id: string): Promise<void> {
+  if (isDemo()) return demo.claimGuardianRecord(id);
   const { error } = await db.rpc("claim_guardian_record", { p_guardian_id: id });
   if (error) throw error;
 }

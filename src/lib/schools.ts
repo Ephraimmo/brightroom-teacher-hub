@@ -11,6 +11,8 @@ import {
   type MembershipRole,
   type SchoolForm,
 } from "@/domain/schools";
+import * as demo from "@/demo/demo-store";
+import { isDemo } from "@/demo/demo-session";
 import { supabase } from "@/integrations/supabase/client";
 
 // Not in the generated types until Lovable applies the SQL.
@@ -55,6 +57,7 @@ const toInstitution = (r: InstitutionRow): Institution => ({
 
 /** Every school a platform admin may see (RLS limits others to their own). */
 export async function listInstitutions(): Promise<Institution[]> {
+  if (isDemo()) return demo.listInstitutions();
   const { data, error } = await db
     .from("institutions")
     .select(
@@ -66,6 +69,7 @@ export async function listInstitutions(): Promise<Institution[]> {
 }
 
 export async function registerInstitution(form: SchoolForm, reason: string): Promise<string> {
+  if (isDemo()) return demo.registerInstitution(form, reason);
   const phone = form.contactPhone.trim();
   const { data, error } = await db.rpc("admin_register_institution", {
     p_name: form.name.trim(),
@@ -86,6 +90,7 @@ export async function setInstitutionStatus(
   status: InstitutionStatus,
   reason: string,
 ): Promise<boolean> {
+  if (isDemo()) return demo.setInstitutionStatus(institutionId, status, reason);
   const { data, error } = await db.rpc("admin_set_institution_status", {
     p_institution_id: institutionId,
     p_status: status,
@@ -104,6 +109,7 @@ export interface MySchool {
 
 /** Schools the signed-in person works in. Empty before the SQL is applied. */
 export async function myInstitutions(): Promise<MySchool[]> {
+  if (isDemo()) return demo.myInstitutions();
   const { data, error } = await db.rpc("my_institutions");
   if (error) {
     if (error.code === "PGRST202") return [];
@@ -126,6 +132,7 @@ export interface MyInvitation {
 
 /** Open invitations for the signed-in person's email. Empty before the SQL is applied. */
 export async function myInvitations(): Promise<MyInvitation[]> {
+  if (isDemo()) return demo.myInvitations();
   const { data, error } = await db.rpc("my_invitations");
   if (error) {
     if (error.code === "PGRST202") return [];
@@ -151,6 +158,7 @@ export async function myInvitations(): Promise<MyInvitation[]> {
 }
 
 export async function acceptInvitation(id: string): Promise<void> {
+  if (isDemo()) return demo.acceptInvitation(id);
   const { error } = await db.rpc("accept_invitation", { p_invitation_id: id });
   if (error) throw error;
 }
@@ -161,6 +169,7 @@ export async function createInvitation(
   role: MembershipRole,
   title: string | null,
 ): Promise<string> {
+  if (isDemo()) return demo.createInvitation(institutionId, email, role, title);
   const { data, error } = await db.rpc("create_invitation", {
     p_institution_id: institutionId,
     p_email: email.trim().toLowerCase(),

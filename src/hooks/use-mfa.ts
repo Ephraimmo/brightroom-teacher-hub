@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useAuth } from "@/components/auth/auth-provider";
 import type { AssuranceLevel, MfaState } from "@/domain/mfa";
+import { isDemo } from "@/demo/demo-session";
+import { myMfa } from "@/demo/demo-store";
 import { supabase } from "@/integrations/supabase/client";
 
 export interface MfaFactor {
@@ -26,6 +28,7 @@ export function useMfa() {
     queryKey: mfaKey(user?.id),
     enabled: Boolean(user),
     queryFn: async (): Promise<MfaInfo> => {
+      if (isDemo()) return myMfa();
       const [aal, factors] = await Promise.all([
         supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
         supabase.auth.mfa.listFactors(),
